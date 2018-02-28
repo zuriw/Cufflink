@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>jchu247@vt.edu</key>
+	<array>
+		<string>Joe Chu</string>
+		<string>bigbooty</string>
+	</array>
+	<key>klew97@vt.edu</key>
+	<array>
+		<string>Kiel Lew</string>
+		<string>helloWorld</string>
+	</array>
+	<key>zuriw@vt.edu</key>
+	<array>
+		<string>Zuri Wong</string>
+		<string>90776447</string>
+	</array>
+</dict>
+</plist>
