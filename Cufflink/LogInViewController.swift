@@ -75,6 +75,8 @@ class LogInViewController: UIViewController {
             return
         }
        
+         performSegue(withIdentifier: "Show Home View", sender: self)
+        
     }
     
     /*

@@ -14,6 +14,7 @@
 		D527B6F72040C57600EB380E /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D527B6F62040C57600EB380E /* LogInViewController.swift */; };
 		D527B6F92040C58C00EB380E /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D527B6F82040C58C00EB380E /* SignUpViewController.swift */; };
 		D527B6FD20459D6100EB380E /* Users.plist in Resources */ = {isa = PBXBuildFile; fileRef = D527B6FC20459D6100EB380E /* Users.plist */; };
+		D527B7882054283800EB380E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D527B7872054283800EB380E /* ProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		D527B6F62040C57600EB380E /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		D527B6F82040C58C00EB380E /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		D527B6FC20459D6100EB380E /* Users.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Users.plist; sourceTree = "<group>"; };
+		D527B7872054283800EB380E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,13 +61,14 @@
 			isa = PBXGroup;
 			children = (
 				D527B6E4203F2E5A00EB380E /* AppDelegate.swift */,
+				D527B6F62040C57600EB380E /* LogInViewController.swift */,
+				D527B6F82040C58C00EB380E /* SignUpViewController.swift */,
 				D527B6E8203F2E5A00EB380E /* Main.storyboard */,
 				D527B6EB203F2E5A00EB380E /* Assets.xcassets */,
 				D527B6ED203F2E5A00EB380E /* LaunchScreen.storyboard */,
 				D527B6F0203F2E5A00EB380E /* Info.plist */,
 				D527B6FC20459D6100EB380E /* Users.plist */,
-				D527B6F62040C57600EB380E /* LogInViewController.swift */,
-				D527B6F82040C58C00EB380E /* SignUpViewController.swift */,
+				D527B7872054283800EB380E /* ProfileViewController.swift */,
 			);
 			path = Cufflink;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 			files = (
 				D527B6F92040C58C00EB380E /* SignUpViewController.swift in Sources */,
 				D527B6F72040C57600EB380E /* LogInViewController.swift in Sources */,
+				D527B7882054283800EB380E /* ProfileViewController.swift in Sources */,
 				D527B6E5203F2E5A00EB380E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
