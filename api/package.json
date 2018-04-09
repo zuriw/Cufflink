@@ -1,0 +1,14 @@
+{
+  "name": "cufflink-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "hapi": "^17.2.3",
+    "mongodb": "^3.0.4"
+  },
+  "scripts": {
+    "start": "node ./index.js"
+  }
+}
