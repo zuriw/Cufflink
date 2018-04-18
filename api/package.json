@@ -5,10 +5,15 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "hapi": "^17.2.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
     "mongodb": "^3.0.4"
   },
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
   }
 }
