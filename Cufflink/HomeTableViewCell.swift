@@ -9,7 +9,11 @@
 import UIKit
 
 class HomeTableViewCell: UITableViewCell {
-
+    @IBOutlet var itemImageView: UIImageView!
+    @IBOutlet var itemTitleLabel: UILabel!
+    @IBOutlet var itemPriceLabel: UILabel!
+    @IBOutlet var itemPriceUnitLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -10,9 +10,18 @@ import UIKit
 
 class AddItemViewController: UIViewController {
 
+    @IBOutlet var addImageOneButton: UIButton!
+    @IBOutlet var addImageTwoButton: UIButton!
+    @IBOutlet var addImageThreeButton: UIButton!
+    @IBOutlet var doneEditingButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        addImageOneButton.layer.borderWidth = 1
+        addImageTwoButton.layer.borderWidth = 1
+        addImageThreeButton.layer.borderWidth = 1
+        doneEditingButton.layer.cornerRadius = 10
+        doneEditingButton.clipsToBounds = true
         // Do any additional setup after loading the view.
     }
 

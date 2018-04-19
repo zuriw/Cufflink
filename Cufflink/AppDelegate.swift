@@ -14,6 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     // Instance variable to hold the object reference of a Dictionary object, the content of which is modifiable at runtime
     var dict_UserEmail_UserData: NSMutableDictionary = NSMutableDictionary()
+    var session = URLSession.shared
+    var items = [Item]()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         /*
@@ -68,6 +70,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Store the object reference into the instance variable
             dict_UserEmail_UserData = dictionaryFromFileInMainBundle!
         }
+        
+        let url = URL(string: "http://cufflink-api.now.sh/items")
+        let task = session.dataTask(with: url!) { (data,_,_) in
+            guard let data = data else {return}
+            do{
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                //print(json)
+                if let array = json as? NSArray{
+                    //print(array)
+                    let dict = array[0] as! NSDictionary
+                    let title = dict["title"] as! String
+                    var imageUrls = [String]()
+                    imageUrls.append(dict["thumbnail"] as! String)
+                    let price = dict["price"] as! NSNumber
+                    let priceUnit = dict["unitForPrice"] as! String
+                    let id = dict["_id"] as! String
+                    let user = User(name: "", email: "", image: "", phone: "", location: 0)
+                    let item = Item(title: title, images: imageUrls, id: id, price: price, priceUnit: priceUnit, details: "", Owner: user)
+                    self.items.append(item)
+                }
+                
+            } catch {}
+            
+        }
+        task.resume()
         
         return true
     }
