@@ -91,12 +91,16 @@ class LogInViewController: UIViewController {
                     if (httpResponse.statusCode == 200) {
                         let values = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: String];
                         self.appDelegate.token = values["token"];
-//                        self.performSegue(withIdentifier: "Show Home View", sender: self)
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: "Show Home View", sender: self)
+                        }
                     } else if httpResponse.statusCode == 400 {
-//                        self.showAlertMessage(
-//                            messageHeader: "Invalid Login Credentials!",
-//                            messageBody: "Please enter a correct email and password"
-//                        )
+                        DispatchQueue.main.async {
+                            self.showAlertMessage(
+                                messageHeader: "Invalid Login Credentials!",
+                                messageBody: "Please enter a correct email and password"
+                            )
+                        }
                         print("fail")
                     } else {
                         print(httpResponse)
