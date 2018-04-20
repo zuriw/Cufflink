@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import CoreLocation
 
 struct Item {
     let title: String
     var images: [String]
     let id: String
+    var available: Bool
     let price: NSNumber
     let priceUnit: String
     var details: String
@@ -28,35 +30,37 @@ struct User{
 }
 
 
-class HomeTableViewController: UITableViewController {
+class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
 
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
-    var items = [Item]()
+    var itemIDs = [String]()
+    var dict_id_item = [String: Item]()
     var session = URLSession()
-    var itemToPass = Item(title: "", images: [], id: "", price: 0, priceUnit: "", details: "", Owner: User(name: "", email: "", image: "", phone: "", location: 0))
-    //var itemIDToPass = 0
+    var itemToPass = Item(title: "", images: [], id: "", available: false, price: 0, priceUnit: "", details: "", Owner: User(name: "", email: "", image: "", phone: "", location: 0))
     let tableViewRowHeight: CGFloat = 70.0
     
+    // Instantiate a CLLocationManager object
+    var locationManager = CLLocationManager()
     
+    var userAuthorizedLocationMonitoring = false
     @IBOutlet var homeTableView: UITableView!
     
     
     override func viewDidLoad() {
-        
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
-        items = appDelegate.items
-        //var request = URLRequest(url: url)
-        
-        //request.httpMethod = "GET"
+        itemIDs = Array(appDelegate.items.keys)
+        dict_id_item = appDelegate.items
         session = appDelegate.session
         super.viewDidLoad()
-        
+        /*
+         The user can turn off location services on an iOS device in Settings.
+         First, you must check to see of it is turned off or not.
+         */
+        if !CLLocationManager.locationServicesEnabled() {
+            showAlertMessage(messageHeader: "Location Services Disabled!",
+            messageBody: "Turn Location Services On in your device settings to be able to use location services!")
+            return
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,7 +77,7 @@ class HomeTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return items.count
+        return itemIDs.count
     }
 
     
@@ -82,12 +86,18 @@ class HomeTableViewController: UITableViewController {
         let rowNumber = (indexPath as NSIndexPath).row
         let cell: HomeTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Home Item Cell") as! HomeTableViewCell
         
+        //Get item ID
+        let id = itemIDs[rowNumber]
+        
+        //Get item
+        var item = dict_id_item[id]
+        
         // Set Item Thumbnail
-        if items[rowNumber].images[0] == ""{
+        if item!.images[0] == ""{
             //cell.itemImageView!.image = UIImage(named: "noPosterImage.png")
             print("no thumbnail")
         }else{
-            let url = URL(string: items[rowNumber].images[0])
+            let url = URL(string: item!.images[0])
             let itemImageData = try? Data(contentsOf: url!)
             
             if let imageData = itemImageData {
@@ -98,8 +108,8 @@ class HomeTableViewController: UITableViewController {
             }
         }
         
-        cell.itemTitleLabel!.text = items[rowNumber].title
-        cell.itemPriceLabel!.text = String(describing: items[rowNumber].price)
+        cell.itemTitleLabel!.text = item!.title
+        cell.itemPriceLabel!.text = String(describing: item!.price)
         //cell.itemPriceUnitLabel!.t
         // Configure the cell...
 
@@ -128,45 +138,17 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let rowNumber = (indexPath as NSIndexPath).row
+        
+        //Get Item ID
+        let id = itemIDs[rowNumber]
+        
         // Obtain the item
-        let item = items[rowNumber]
-        //let VC = self.storyboard?.instantiateViewControllerWithIdentifier("ResetPasswordSuccessPopOver") as! ResetPasswordSuccessPopOverViewController
+        let item = dict_id_item[id]
         
-        let url = URL(string: "http://cufflink-api.now.sh/items/\(String(item.id))")
-        let task = session.dataTask(with: url!) { (data,_,_) in
-            guard let data = data else {return}
-            do{
-                let json = try JSONSerialization.jsonObject(with: data, options: [])
-                //print(json)
-                if let myItem = json as? NSDictionary{
-                    //print(array)
-                    //let title = myItem["title"] as! String
-                    var imageUrls = myItem["pictures"] as! NSArray
-                    //let price = myItem["price"] as! NSNumber
-                    //let id = myItem["_id"] as! String
-                    //let priceUnit = myItem["unitForPrice"] as! String
-                    var description = myItem["description"] as! String
-                    var myOwner = NSDictionary()
-                    myOwner = myItem["owner"] as! NSDictionary
-                    var user = User(name: myOwner["name"] as! String, email: myOwner["email"] as! String, image: "", phone: "", location: myOwner["zipcode"] as! NSNumber)
-                    self.itemToPass.images = imageUrls as! [String]
-                    self.itemToPass.details = description
-                    self.itemToPass.Owner = user
-                    
-                    let itemDetailsViewController = self.storyboard?.instantiateViewController(withIdentifier: "ItemDetails") as! ItemDetailsViewController
-                    itemDetailsViewController.itemPassed = self.itemToPass
-                    itemDetailsViewController.navigationItem.title = self.itemToPass.title
-                    itemDetailsViewController.modalPresentationStyle = .overCurrentContext
-                    self.present(itemDetailsViewController, animated: true, completion: nil)
-
-                }
-                //performSegue(withIdentifier: "Show Item Details", sender: self.x)
-            } catch {}
-            
-        }
+        //Pass item to itemToPass
+        itemToPass = item!
         
-        
-        task.resume()
+        performSegue(withIdentifier: "Show Item Details", sender: self)
         
     }
     
@@ -216,6 +198,10 @@ class HomeTableViewController: UITableViewController {
     }
     */
     
+    @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
+        
+        performSegue(withIdentifier: "Add Item", sender: self)
+    }
     
     /*
      -------------------------
@@ -236,7 +222,30 @@ class HomeTableViewController: UITableViewController {
             itemDetailsViewController.itemPassed = itemToPass
             itemDetailsViewController.navigationItem.title = itemToPass.title
             
+        }else if segue.identifier == "Add Item"{
+            
+            
         }
+    }
+    
+    /*
+     -----------------------------
+     MARK: - Display Alert Message
+     -----------------------------
+     */
+    func showAlertMessage(messageHeader header: String, messageBody body: String) {
+        
+        /*
+         Create a UIAlertController object; dress it up with title, message, and preferred style;
+         and store its object reference into local constant alertController
+         */
+        let alertController = UIAlertController(title: header, message: body, preferredStyle: UIAlertControllerStyle.alert)
+        
+        // Create a UIAlertAction object and add it to the alert controller
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        // Present the alert controller
+        present(alertController, animated: true, completion: nil)
     }
 
 }

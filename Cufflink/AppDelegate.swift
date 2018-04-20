@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Instance variable to hold the object reference of a Dictionary object, the content of which is modifiable at runtime
     var dict_UserEmail_UserData: NSMutableDictionary = NSMutableDictionary()
     var session = URLSession.shared
-    var items = [Item]()
+    var items = [String: Item]()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         /*
@@ -79,16 +79,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //print(json)
                 if let array = json as? NSArray{
                     //print(array)
+                    
                     let dict = array[0] as! NSDictionary
-                    let title = dict["title"] as! String
-                    var imageUrls = [String]()
-                    imageUrls.append(dict["thumbnail"] as! String)
-                    let price = dict["price"] as! NSNumber
-                    let priceUnit = dict["unitForPrice"] as! String
                     let id = dict["_id"] as! String
-                    let user = User(name: "", email: "", image: "", phone: "", location: 0)
-                    let item = Item(title: title, images: imageUrls, id: id, price: price, priceUnit: priceUnit, details: "", Owner: user)
-                    self.items.append(item)
+                    
+                    //Get Item Details from id
+                    let itemUrl = URL(string: "http://cufflink-api.now.sh/items/\(String(id))")
+                    let itemTask = self.session.dataTask(with: itemUrl!) { (data,_,_) in
+                        guard let data = data else {return}
+                        do{
+                            let json = try JSONSerialization.jsonObject(with: data, options: [])
+                            if let myItem = json as? NSDictionary{
+                                let title = myItem["title"] as! String
+                                let imageUrls = myItem["pictures"] as! NSArray
+                                let price = myItem["price"] as! NSNumber
+                                let id = myItem["_id"] as! String
+                                let priceUnit = myItem["unitForPrice"] as! String
+                                let description = myItem["description"] as! String
+                                var myOwner = NSDictionary()
+                                myOwner = myItem["owner"] as! NSDictionary
+                                let user = User(name: myOwner["name"] as! String, email: myOwner["email"] as! String, image: "", phone: "", location: myOwner["zipcode"] as! NSNumber)
+                                
+                                let item = Item(title: title, images: imageUrls as! [String], id: id, available: false, price: price, priceUnit: priceUnit, details: description, Owner: user)
+                                self.items[id] = item
+                                
+                            }
+                        } catch {}
+                        
+                    }
+                    
+                    
+                    itemTask.resume()
                 }
                 
             } catch {}

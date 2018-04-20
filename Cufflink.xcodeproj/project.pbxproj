@@ -14,12 +14,13 @@
 		D527B6F72040C57600EB380E /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D527B6F62040C57600EB380E /* LogInViewController.swift */; };
 		D527B6F92040C58C00EB380E /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D527B6F82040C58C00EB380E /* SignUpViewController.swift */; };
 		D527B6FD20459D6100EB380E /* Users.plist in Resources */ = {isa = PBXBuildFile; fileRef = D527B6FC20459D6100EB380E /* Users.plist */; };
-		D527B7882054283800EB380E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D527B7872054283800EB380E /* ProfileViewController.swift */; };
 		D531B549207BEC790021B08E /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D531B548207BEC790021B08E /* HomeTableViewController.swift */; };
 		D531B54E207BF3D90021B08E /* Lobster-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D531B54D207BF3D70021B08E /* Lobster-Regular.ttf */; };
 		D531B550207BF8330021B08E /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D531B54F207BF8330021B08E /* HomeTableViewCell.swift */; };
 		D531B552207F88080021B08E /* ItemDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D531B551207F88080021B08E /* ItemDetailsViewController.swift */; };
 		D54841B9208831440003F7AE /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54841B8208831440003F7AE /* AddItemViewController.swift */; };
+		D54841BB20898BF80003F7AE /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54841BA20898BF80003F7AE /* UserProfileViewController.swift */; };
+		D54841BE208A33080003F7AE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D54841BD208A33080003F7AE /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,12 +33,13 @@
 		D527B6F62040C57600EB380E /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		D527B6F82040C58C00EB380E /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		D527B6FC20459D6100EB380E /* Users.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Users.plist; sourceTree = "<group>"; };
-		D527B7872054283800EB380E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D531B548207BEC790021B08E /* HomeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		D531B54D207BF3D70021B08E /* Lobster-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lobster-Regular.ttf"; sourceTree = "<group>"; };
 		D531B54F207BF8330021B08E /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		D531B551207F88080021B08E /* ItemDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailsViewController.swift; sourceTree = "<group>"; };
 		D54841B8208831440003F7AE /* AddItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
+		D54841BA20898BF80003F7AE /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		D54841BD208A33080003F7AE /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D54841BE208A33080003F7AE /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +59,7 @@
 			children = (
 				D527B6E3203F2E5A00EB380E /* Cufflink */,
 				D527B6E2203F2E5A00EB380E /* Products */,
+				D54841BC208A33070003F7AE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,8 +81,8 @@
 				D531B548207BEC790021B08E /* HomeTableViewController.swift */,
 				D531B54F207BF8330021B08E /* HomeTableViewCell.swift */,
 				D531B551207F88080021B08E /* ItemDetailsViewController.swift */,
-				D527B7872054283800EB380E /* ProfileViewController.swift */,
 				D54841B8208831440003F7AE /* AddItemViewController.swift */,
+				D54841BA20898BF80003F7AE /* UserProfileViewController.swift */,
 				D527B6E8203F2E5A00EB380E /* Main.storyboard */,
 				D527B6EB203F2E5A00EB380E /* Assets.xcassets */,
 				D527B6ED203F2E5A00EB380E /* LaunchScreen.storyboard */,
@@ -94,6 +98,14 @@
 				D531B54D207BF3D70021B08E /* Lobster-Regular.ttf */,
 			);
 			path = fonts;
+			sourceTree = "<group>";
+		};
+		D54841BC208A33070003F7AE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D54841BD208A33080003F7AE /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -174,9 +186,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D531B550207BF8330021B08E /* HomeTableViewCell.swift in Sources */,
+				D54841BB20898BF80003F7AE /* UserProfileViewController.swift in Sources */,
 				D527B6F92040C58C00EB380E /* SignUpViewController.swift in Sources */,
 				D527B6F72040C57600EB380E /* LogInViewController.swift in Sources */,
-				D527B7882054283800EB380E /* ProfileViewController.swift in Sources */,
 				D527B6E5203F2E5A00EB380E /* AppDelegate.swift in Sources */,
 				D54841B9208831440003F7AE /* AddItemViewController.swift in Sources */,
 				D531B552207F88080021B08E /* ItemDetailsViewController.swift in Sources */,

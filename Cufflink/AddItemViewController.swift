@@ -10,17 +10,21 @@ import UIKit
 
 class AddItemViewController: UIViewController {
 
+    @IBOutlet var itemTitleTextField: UITextField!
+    @IBOutlet var itemPriceTextField: UITextField!
     @IBOutlet var addImageOneButton: UIButton!
     @IBOutlet var addImageTwoButton: UIButton!
     @IBOutlet var addImageThreeButton: UIButton!
     @IBOutlet var doneEditingButton: UIButton!
+    @IBOutlet var itemDescriptionTextView: UITextView!
+    @IBOutlet var priceUnitSegmentControl: UISegmentedControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addImageOneButton.layer.borderWidth = 1
         addImageTwoButton.layer.borderWidth = 1
         addImageThreeButton.layer.borderWidth = 1
-        doneEditingButton.layer.cornerRadius = 10
+        doneEditingButton.layer.cornerRadius = 17
         doneEditingButton.clipsToBounds = true
         // Do any additional setup after loading the view.
     }
@@ -30,7 +34,9 @@ class AddItemViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    @IBAction func addImageOneButtonTapped(_ sender: UIButton) {
+    }
+    
     /*
     // MARK: - Navigation
 

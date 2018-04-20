@@ -1,18 +1,30 @@
 //
-//  ProfileViewController.swift
+//  UserProfileViewController.swift
 //  Cufflink
 //
-//  Created by Zuri Wong on 3/10/18.
+//  Created by Zuri Wong on 4/19/18.
 //  Copyright © 2018 Zuri Wong. All rights reserved.
 //
 
 import UIKit
+import CoreLocation
 
-class ProfileViewController: UIViewController {
+class UserProfileViewController: UIViewController{
 
+    @IBOutlet var userImageView: UIButton!
+    @IBOutlet var userNameLabel: UILabel!
+    @IBOutlet var userGeneralLocationLabel: UILabel!
+    @IBOutlet var distanceLabel: UILabel!
+    var ownerPassed = User(name: "", email: "", image: "", phone: "", location: 0)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        userNameLabel.text! = ownerPassed.name
+        userImageView.layer.borderWidth = 1
+        userImageView.layer.masksToBounds = false
+        userImageView.layer.borderColor = UIColor.white.cgColor
+        userImageView.layer.cornerRadius = userImageView.frame.height/2
+        userImageView.clipsToBounds = true
         // Do any additional setup after loading the view.
     }
 
