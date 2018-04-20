@@ -15,7 +15,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Instance variable to hold the object reference of a Dictionary object, the content of which is modifiable at runtime
     var dict_UserEmail_UserData: NSMutableDictionary = NSMutableDictionary()
     var session = URLSession.shared
+    var token: String!
     var items = [String: Item]()
+
+    func requestUrl(_ string: String, _ body: Any?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        let url = URL(string: string)
+        var request = URLRequest(url: url!)
+        request.httpMethod = body == nil ? "GET" : "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        if self.token != nil {
+            request.addValue(self.token, forHTTPHeaderField: "token")
+        }
+        do {
+            if body != nil {
+                request.httpBody = try JSONSerialization.data(withJSONObject: body!, options: [])
+            }
+            let task = self.session.dataTask(with: request)
+            task.resume()
+        } catch {
+            print(error)
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         /*
@@ -84,8 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let id = dict["_id"] as! String
                     
                     //Get Item Details from id
-                    let itemUrl = URL(string: "http://cufflink-api.now.sh/items/\(String(id))")
-                    let itemTask = self.session.dataTask(with: itemUrl!) { (data,_,_) in
+                    self.requestUrl("http://cufflink-api.now.sh/items/\(String(id))", nil) { (data,_,_) in
                         guard let data = data else {return}
                         do{
                             let json = try JSONSerialization.jsonObject(with: data, options: [])
@@ -107,9 +126,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         } catch {}
                         
                     }
-                    
-                    
-                    itemTask.resume()
                 }
                 
             } catch {}

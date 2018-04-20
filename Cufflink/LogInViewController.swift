@@ -10,7 +10,7 @@ import UIKit
 
 class LogInViewController: UIViewController {
     // Obtain the object reference to the App Delegate object
-    let applicationDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+    let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
     
     //---------- Create and Initialize the Array -----------------------
     var userEmails = [String]()
@@ -21,7 +21,7 @@ class LogInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        userEmails = applicationDelegate.dict_UserEmail_UserData.allKeys as! [String]
+        userEmails = appDelegate.dict_UserEmail_UserData.allKeys as! [String]
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,40 +42,74 @@ class LogInViewController: UIViewController {
     @IBAction func signInButtonTapped(_ sender: Any) {
         // Get the email entered by the user
         let emailObtained: String = emailTextField.text!
-        
+
         // Get the password entered by the user
         let passwordObtained: String = passwordTextField.text!
-        
-        /*********************
-         Input Data Validation
-         *********************/
-        if !isValidEmail(testStr: emailObtained){
-            showAlertMessage(messageHeader: "Invalid Email Entered!", messageBody: "Please enter a valid email")
-            return
+//
+//        /*********************
+//         Input Data Validation
+//         *********************/
+//        if !isValidEmail(testStr: emailObtained){
+//            showAlertMessage(messageHeader: "Invalid Email Entered!", messageBody: "Please enter a valid email")
+//            return
+//        }
+//
+//        if !userEmails.contains(emailObtained) {
+//            showAlertMessage(messageHeader: "Invalid Email Entered!", messageBody: "Cannot find account")
+//            return
+//        }
+//        // Obtain the list of data values of the given userEmail as AnyObject
+//        let userDataObtained: AnyObject? = applicationDelegate.dict_UserEmail_UserData[emailObtained] as AnyObject
+//
+//        // Typecast the AnyObject to Swift array of String objects
+//        var userData = userDataObtained! as! [String]
+//
+//        /*
+//         userData[0] = User Name
+//         userData[1] = User Password
+//         */
+//
+//        let userPassword = userData[1] as String
+//        if userPassword != passwordObtained{
+//            showAlertMessage(messageHeader: "Invalid Password Entered!", messageBody: "Please enter a correct password")
+//            return
+//        }
+
+
+        let url = URL(string: "https://cufflink-api-ksdqlxufqo.now.sh/login")
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: [
+                "email": emailObtained,
+                "password": passwordObtained
+            ], options: [])
+            let task = appDelegate.session.dataTask(with: request) { (data, response, _) in
+                let httpResponse = response! as! HTTPURLResponse
+                do {
+                    if (httpResponse.statusCode == 200) {
+                        let values = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: String];
+                        self.appDelegate.token = values["token"];
+//                        self.performSegue(withIdentifier: "Show Home View", sender: self)
+                    } else if httpResponse.statusCode == 400 {
+//                        self.showAlertMessage(
+//                            messageHeader: "Invalid Login Credentials!",
+//                            messageBody: "Please enter a correct email and password"
+//                        )
+                        print("fail")
+                    } else {
+                        print(httpResponse)
+                        print(String(data: data!, encoding: .utf8)!)
+                    }
+                } catch {
+                    print(error)
+                }
+            }
+            task.resume()
+        } catch {
+            print(error)
         }
-        
-        if !userEmails.contains(emailObtained) {
-            showAlertMessage(messageHeader: "Invalid Email Entered!", messageBody: "Cannot find account")
-            return
-        }
-        // Obtain the list of data values of the given userEmail as AnyObject
-        let userDataObtained: AnyObject? = applicationDelegate.dict_UserEmail_UserData[emailObtained] as AnyObject
-        
-        // Typecast the AnyObject to Swift array of String objects
-        var userData = userDataObtained! as! [String]
-        
-        /*
-         userData[0] = User Name
-         userData[1] = User Password
-         */
-        
-        let userPassword = userData[1] as String
-        if userPassword != passwordObtained{
-            showAlertMessage(messageHeader: "Invalid Password Entered!", messageBody: "Please enter a correct password")
-            return
-        }
-       
-         performSegue(withIdentifier: "Show Home View", sender: self)
         
     }
     
