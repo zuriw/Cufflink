@@ -341,7 +341,7 @@
         <!--Home-->
         <scene sceneID="jRD-L7-a0v">
             <objects>
-                <tableViewController id="Ujo-g5-VX5" customClass="HomeTableViewController" customModule="Cufflink" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="HomeTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ujo-g5-VX5" customClass="HomeTableViewController" customModule="Cufflink" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="R9S-Xe-80c">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1561,6 +1561,6 @@
         <image name="oldguy" width="800" height="1000"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kgp-Lh-aGp"/>
+        <segue reference="oHq-bD-f6z"/>
     </inferredMetricsTieBreakers>
 </document>

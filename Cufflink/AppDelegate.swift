@@ -12,8 +12,6 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    // Instance variable to hold the object reference of a Dictionary object, the content of which is modifiable at runtime
-    var dict_UserEmail_UserData: NSMutableDictionary = NSMutableDictionary()
     var session = URLSession.shared
     var token: String!
     var items = [String: Item]()
@@ -38,101 +36,101 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        /*
-         All application-specific and user data must be written to files that reside in the iOS device's
-         Document directory. Nothing can be written into application's main bundle (project folder) because
-         it is locked for writing after your app is published.
-         
-         The contents of the iOS device's Document directory are backed up by iTunes during backup of an iOS device.
-         Therefore, the user can recover the data written by your app from an earlier device backup.
-         
-         The Document directory path on an iOS device is different from the one used for the iOS Simulator.
-         
-         To obtain the Document directory path, you use the NSSearchPathForDirectoriesInDomains function.
-         However, this function was created originally for Mac OS, where multiple such directories could exist.
-         Therefore, it returns an array of paths rather than a single path.
-         
-         For iOS, the resulting array's first element (index=0) contains the path to the Document directory.
-         */
+//        /*
+//         All application-specific and user data must be written to files that reside in the iOS device's
+//         Document directory. Nothing can be written into application's main bundle (project folder) because
+//         it is locked for writing after your app is published.
+//
+//         The contents of the iOS device's Document directory are backed up by iTunes during backup of an iOS device.
+//         Therefore, the user can recover the data written by your app from an earlier device backup.
+//
+//         The Document directory path on an iOS device is different from the one used for the iOS Simulator.
+//
+//         To obtain the Document directory path, you use the NSSearchPathForDirectoriesInDomains function.
+//         However, this function was created originally for Mac OS, where multiple such directories could exist.
+//         Therefore, it returns an array of paths rather than a single path.
+//
+//         For iOS, the resulting array's first element (index=0) contains the path to the Document directory.
+//         */
+//
+//        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+//        let documentDirectoryPath = paths[0] as String
+//
+//        // Add the plist filename to the document directory path to obtain an absolute path to the plist filename
+//        let plistFilePathInDocumentDirectory = documentDirectoryPath + "/Users.plist"
+//
+//        /*
+//         NSMutableDictionary manages an *unordered* collection of mutable (modifiable) key-value pairs.
+//         Instantiate an NSMutableDictionary object and initialize it with the contents of the Users.plist file.
+//         */
+//        let dictionaryFromFile: NSMutableDictionary? = NSMutableDictionary(contentsOfFile: plistFilePathInDocumentDirectory)
+//
+//        /*
+//         IF the optional variable dictionaryFromFile has a value, THEN
+//         Users.plist exists in the Document directory and the dictionary is successfully created
+//         ELSE read Users.plist from the application's main bundle.
+//         */
+//        if let dictionaryFromFileInDocumentDirectory = dictionaryFromFile {
+//
+//            // Users.plist exists in the Document directory
+//            dict_UserEmail_UserData = dictionaryFromFileInDocumentDirectory
+//
+//        } else {
+//
+//            // CompaniesILike.plist does not exist in the Document directory; Read it from the main bundle.
+//
+//            // Obtain the file path to the plist file in the mainBundle (project folder)
+//            let plistFilePathInMainBundle = Bundle.main.path(forResource: "Users", ofType: "plist")
+//
+//            // Instantiate an NSMutableDictionary object and initialize it with the contents of the Users.plist file.
+//            let dictionaryFromFileInMainBundle: NSMutableDictionary? = NSMutableDictionary(contentsOfFile: plistFilePathInMainBundle!)
+//
+//            // Store the object reference into the instance variable
+//            dict_UserEmail_UserData = dictionaryFromFileInMainBundle!
+//        }
         
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let documentDirectoryPath = paths[0] as String
-        
-        // Add the plist filename to the document directory path to obtain an absolute path to the plist filename
-        let plistFilePathInDocumentDirectory = documentDirectoryPath + "/Users.plist"
-        
-        /*
-         NSMutableDictionary manages an *unordered* collection of mutable (modifiable) key-value pairs.
-         Instantiate an NSMutableDictionary object and initialize it with the contents of the Users.plist file.
-         */
-        let dictionaryFromFile: NSMutableDictionary? = NSMutableDictionary(contentsOfFile: plistFilePathInDocumentDirectory)
-        
-        /*
-         IF the optional variable dictionaryFromFile has a value, THEN
-         Users.plist exists in the Document directory and the dictionary is successfully created
-         ELSE read Users.plist from the application's main bundle.
-         */
-        if let dictionaryFromFileInDocumentDirectory = dictionaryFromFile {
-            
-            // Users.plist exists in the Document directory
-            dict_UserEmail_UserData = dictionaryFromFileInDocumentDirectory
-            
-        } else {
-            
-            // CompaniesILike.plist does not exist in the Document directory; Read it from the main bundle.
-            
-            // Obtain the file path to the plist file in the mainBundle (project folder)
-            let plistFilePathInMainBundle = Bundle.main.path(forResource: "Users", ofType: "plist")
-            
-            // Instantiate an NSMutableDictionary object and initialize it with the contents of the Users.plist file.
-            let dictionaryFromFileInMainBundle: NSMutableDictionary? = NSMutableDictionary(contentsOfFile: plistFilePathInMainBundle!)
-            
-            // Store the object reference into the instance variable
-            dict_UserEmail_UserData = dictionaryFromFileInMainBundle!
-        }
-        
-        let url = URL(string: "http://cufflink-api.now.sh/items")
-        let task = session.dataTask(with: url!) { (data,_,_) in
-            guard let data = data else {return}
-            do{
-                let json = try JSONSerialization.jsonObject(with: data, options: [])
-                //print(json)
-                if let array = json as? NSArray{
-                    //print(array)
-                    
-                    let dict = array[0] as! NSDictionary
-                    let id = dict["_id"] as! String
-                    
-                    //Get Item Details from id
-                    self.requestUrl("http://cufflink-api.now.sh/items/\(String(id))", nil) { (data,_,_) in
-                        guard let data = data else {return}
-                        do{
-                            let json = try JSONSerialization.jsonObject(with: data, options: [])
-                            if let myItem = json as? NSDictionary{
-                                let title = myItem["title"] as! String
-                                let imageUrls = myItem["pictures"] as! NSArray
-                                let price = myItem["price"] as! NSNumber
-                                let id = myItem["_id"] as! String
-                                let priceUnit = myItem["unitForPrice"] as! String
-                                let description = myItem["description"] as! String
-                                var myOwner = NSDictionary()
-                                myOwner = myItem["owner"] as! NSDictionary
-                                let user = User(name: myOwner["name"] as! String, email: myOwner["email"] as! String, image: "", phone: "", location: myOwner["zipcode"] as! NSNumber)
-                                
-                                let item = Item(title: title, images: imageUrls as! [String], id: id, available: false, price: price, priceUnit: priceUnit, details: description, Owner: user)
-                                self.items[id] = item
-                                
-                            }
-                        } catch {}
-                        
-                    }
-                }
-                
-            } catch {}
-            
-        }
-        task.resume()
-        
+//        let url = URL(string: "http://cufflink-api.now.sh/items")
+//        let task = session.dataTask(with: url!) { (data,_,_) in
+//            guard let data = data else {return}
+//            do{
+//                let json = try JSONSerialization.jsonObject(with: data, options: [])
+//                //print(json)
+//                if let array = json as? NSArray{
+//                    //print(array)
+//
+//                    let dict = array[0] as! NSDictionary
+//                    let id = dict["_id"] as! String
+//
+//                    //Get Item Details from id
+//                    self.requestUrl("http://cufflink-api.now.sh/items/\(String(id))", nil) { (data,_,_) in
+//                        guard let data = data else {return}
+//                        do{
+//                            let json = try JSONSerialization.jsonObject(with: data, options: [])
+//                            if let myItem = json as? NSDictionary{
+//                                let title = myItem["title"] as! String
+//                                let imageUrls = myItem["pictures"] as! NSArray
+//                                let price = myItem["price"] as! NSNumber
+//                                let id = myItem["_id"] as! String
+//                                let priceUnit = myItem["unitForPrice"] as! String
+//                                let description = myItem["description"] as! String
+//                                var myOwner = NSDictionary()
+//                                myOwner = myItem["owner"] as! NSDictionary
+//                                let user = User(name: myOwner["name"] as! String, email: myOwner["email"] as! String, image: "", phone: "", location: myOwner["zipcode"] as! NSNumber)
+//
+//                                let item = Item(title: title, images: imageUrls as! [String], id: id, available: false, price: price, priceUnit: priceUnit, details: description, Owner: user)
+//                                self.items[id] = item
+//
+//                            }
+//                        } catch {}
+//
+//                    }
+//                }
+//
+//            } catch {}
+//
+//        }
+//        task.resume()
+//
         return true
     }
 
@@ -144,15 +142,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          locked, and gains focus when the device is unlocked." [Apple]
          */
         
-        // Define the file path to the CompaniesILike.plist file in the Document directory
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let documentDirectoryPath = paths[0] as String
-        
-        // Add the plist filename to the document directory path to obtain an absolute path to the plist filename
-        let plistFilePathInDocumentDirectory = documentDirectoryPath + "/Users.plist"
-        
-        // Write the NSMutableDictionary to the Users.plist file in the Document directory
-        dict_UserEmail_UserData.write(toFile: plistFilePathInDocumentDirectory, atomically: true)
+//        // Define the file path to the CompaniesILike.plist file in the Document directory
+//        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+//        let documentDirectoryPath = paths[0] as String
+//
+//        // Add the plist filename to the document directory path to obtain an absolute path to the plist filename
+//        let plistFilePathInDocumentDirectory = documentDirectoryPath + "/Users.plist"
+//
+//        // Write the NSMutableDictionary to the Users.plist file in the Document directory
+//        dict_UserEmail_UserData.write(toFile: plistFilePathInDocumentDirectory, atomically: true)
         
         /*
          The flag "atomically" specifies whether the file should be written atomically or not.

@@ -22,7 +22,7 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        userEmails = applicationDelegate.dict_UserEmail_UserData.allKeys as! [String]
+        //userEmails = applicationDelegate.dict_UserEmail_UserData.allKeys as! [String]
         // Do any additional setup after loading the view.
     }
 
@@ -85,9 +85,9 @@ class SignUpViewController: UIViewController {
          dict_UserEmail_UserData held by the app delegate object.
          ---------------------------------------------------------------------
          */
-        applicationDelegate.dict_UserEmail_UserData.setObject(userData, forKey: email as NSCopying)
+        //applicationDelegate.dict_UserEmail_UserData.setObject(userData, forKey: email as NSCopying)
         
-        userEmails = applicationDelegate.dict_UserEmail_UserData.allKeys as! [String]
+        //userEmails = applicationDelegate.dict_UserEmail_UserData.allKeys as! [String]
         
         // Sort the userEmails within itself in alphabetical order
         userEmails.sort { $0 < $1 }
