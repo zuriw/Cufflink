@@ -35,7 +35,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
     var itemIDs = [String]()
     var dict_id_item = [String: Item]()
-    var session = URLSession()
+    var session = URLSession.shared
     var itemToPass = Item(title: "", images: [], id: "", available: false, price: 0, priceUnit: "", details: "", Owner: User(name: "", email: "", image: "", phone: "", location: 0))
     let tableViewRowHeight: CGFloat = 70.0
     
@@ -50,7 +50,6 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
 
         itemIDs = Array(appDelegate.items.keys)
         dict_id_item = appDelegate.items
-        session = appDelegate.session
         super.viewDidLoad()
         /*
          The user can turn off location services on an iOS device in Settings.

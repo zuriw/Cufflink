@@ -12,26 +12,88 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var session = URLSession.shared
     var token: String!
     var items = [String: Item]()
 
-    func requestUrl(_ string: String, _ body: Any?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    func login(email: String, password: String, completionHandler: @escaping (Bool) -> Void) {
+        let url = URL(string: "https://cufflink-api-ksdqlxufqo.now.sh/login")
+
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        // Setting the content-type as JSON
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        //Setting the result content-type as JSON
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        let postString = [
+            "email": email,
+            "password": password
+        ] as [String: String]
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: postString, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: request) { (data, response: URLResponse?, error: Error?) in
+            let httpResponse = response! as! HTTPURLResponse
+            if (httpResponse.statusCode == 200) {
+                do {
+                    let values = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: String]
+                    self.token = values["token"]
+                    DispatchQueue.main.async {
+                        completionHandler(true)
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
+                }
+            } else if httpResponse.statusCode == 400 {
+                DispatchQueue.main.async {
+                    completionHandler(false)
+                }
+            } else {
+                print(httpResponse)
+                print(String(data: data!, encoding: .utf8)!)
+            }
+        }
+        task.resume()
+    }
+
+    func requestUrl(_ string: String, _ body: Any?, completionHandler: @escaping (Any, HTTPURLResponse) -> Void) {
         let url = URL(string: string)
+
         var request = URLRequest(url: url!)
         request.httpMethod = body == nil ? "GET" : "POST"
+        // Setting the content-type as JSON
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        //Setting the result content-type as JSON
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
         if self.token != nil {
             request.addValue(self.token, forHTTPHeaderField: "token")
         }
+
         do {
             if body != nil {
                 request.httpBody = try JSONSerialization.data(withJSONObject: body!, options: [])
             }
-            let task = self.session.dataTask(with: request)
+
+            let task = URLSession.shared.dataTask(with: request) { (data, response: URLResponse?, error: Error?) in
+                let httpResponse = response! as! HTTPURLResponse
+                DispatchQueue.main.async {
+                    do {
+                        let values = try JSONSerialization.jsonObject(with: data!, options: [])
+                        completionHandler(values, httpResponse)
+                    } catch let error {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
             task.resume()
-        } catch {
-            print(error)
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
 
