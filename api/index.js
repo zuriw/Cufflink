@@ -2,7 +2,7 @@ const crypto = require("crypto");
 
 const express = require("express");
 const app = express();
-const { MongoClient, GridFSBucket } = require("mongodb");
+const { MongoClient, GridFSBucket, ObjectID } = require("mongodb");
 const { verify, sign } = require("jsonwebtoken");
 
 app.use(express.json());
@@ -53,7 +53,10 @@ const client = MongoClient.connect(
           .collection("users")
           .insertOne({
             email,
-            hashedPassword: hashPassword(password)
+            hashedPassword: hashPassword(password),
+            location: req.body.location,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
           })
           .then(() => {
             res
@@ -131,10 +134,15 @@ const client = MongoClient.connect(
           } else {
             db
               .collection("users")
-              .findOne({ _id: decoded._id })
+              .findOne({ _id: new ObjectID(decoded._id) })
               .then(user => {
-                req.user = user;
-                next();
+                if (user == null) {
+                  failAuthentication();
+                } else {
+                  delete user.hashedPassword;
+                  req.user = user;
+                  next();
+                }
               })
               .catch(err => {
                 failAuthentication();
@@ -147,19 +155,20 @@ const client = MongoClient.connect(
     };
 
     app.get("/items", authenticate, async (req, res) => {
-      const items = await db
-        .collection("items")
-        .find()
-        .toArray()
-        .map(item => ({
-          _id: item._id,
-          title: item.title,
-          price: item.price,
-          unitForPrice: item.unitForPrice,
-          thumbnail: item.pictures[0]
-        }));
+      const cursor = await db.collection("items").find();
+      const items = await cursor.toArray();
 
-      res.json(items).end();
+      res
+        .json(
+          items.map(item => ({
+            _id: item._id,
+            title: item.title,
+            price: item.price,
+            unitForPrice: item.unitForPrice,
+            thumbnail: item.pictures[0]
+          }))
+        )
+        .end();
     });
 
     app.post("/items", authenticate, async (req, res) => {
@@ -191,8 +200,15 @@ const client = MongoClient.connect(
     });
 
     app.get("/items/:id", authenticate, async (req, res) => {
-      const item = await db.collection("items").findOne({ _id: req.params.id });
-      const owner = await db.collection("users").findOne({ _id: item.owner });
+      const item = await db
+        .collection("items")
+        .findOne({ _id: new ObjectID(req.params.id) });
+
+      const owner = await db
+        .collection("users")
+        .findOne({ _id: new ObjectID(item.owner) });
+      delete owner.hashedPassword;
+
       res
         .json({
           ...item,
@@ -201,8 +217,18 @@ const client = MongoClient.connect(
         .end();
     });
 
-    // app.get("/users");
-    // app.get("/users/:id");
+    app.get("/me", authenticate, (req, res) => {
+      res.json(req.user).end();
+    });
+
+    app.get("/users/:id", authenticate, async (req, res) => {
+      const user = await db
+        .collection("users")
+        .findOne({ _id: new ObjectID(req.params.id) });
+      delete user.hashedPassword;
+
+      res.json(user).end();
+    });
 
     db.collection("users").createIndex({ email: 1 }, { unique: true }, err => {
       if (err) {
