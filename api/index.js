@@ -26,6 +26,17 @@ const client = MongoClient.connect(
     const db = client.db("cufflink");
     const bucket = new GridFSBucket(db);
 
+    const catchPromise = fn => async (req, res) => {
+      try {
+        await fn(req, res);
+      } catch (error) {
+        res
+          .json({ error })
+          .status(500)
+          .end();
+      }
+    };
+
     app.post("/signup", (req, res) => {
       if (
         req.body.email == null ||
@@ -154,31 +165,39 @@ const client = MongoClient.connect(
       }
     };
 
-    app.get("/items", authenticate, async (req, res) => {
-      const cursor = await db.collection("items").find();
-      const items = await cursor.toArray();
+    app.get(
+      "/items",
+      authenticate,
+      catchPromise(async (req, res) => {
+        const cursor = await db.collection("items").find();
+        const items = await cursor.toArray();
 
-      res
-        .json(
-          items.map(item => ({
-            _id: item._id,
-            title: item.title,
-            price: item.price,
-            unitForPrice: item.unitForPrice,
-            thumbnail: item.pictures[0]
-          }))
-        )
-        .end();
-    });
+        res
+          .json(
+            items.map(item => ({
+              _id: item._id,
+              title: item.title,
+              price: item.price,
+              unitForPrice: item.unitForPrice,
+              thumbnail: item.pictures[0]
+            }))
+          )
+          .end();
+      })
+    );
 
-    app.post("/items", authenticate, async (req, res) => {
-      await db.collection("items").insertOne({
-        ...req.body,
-        owner: req.user._id
-      });
+    app.post(
+      "/items",
+      authenticate,
+      catchPromise(async (req, res) => {
+        await db.collection("items").insertOne({
+          ...req.body,
+          owner: req.user._id
+        });
 
-      res.json({ success: true }).end();
-    });
+        res.json({ success: true }).end();
+      })
+    );
 
     app.post("/upload", authenticate, (req, res) => {
       if (req.get("Content-Type") !== "image/jpeg") {
@@ -199,36 +218,55 @@ const client = MongoClient.connect(
       bucket.openDownloadStreamByName(req.params.name).pipe(res);
     });
 
-    app.get("/items/:id", authenticate, async (req, res) => {
-      const item = await db
-        .collection("items")
-        .findOne({ _id: new ObjectID(req.params.id) });
+    app.get(
+      "/items/:id",
+      authenticate,
+      catchPromise(async (req, res) => {
+        const item = await db
+          .collection("items")
+          .findOne({ _id: new ObjectID(req.params.id) });
 
-      const owner = await db
-        .collection("users")
-        .findOne({ _id: new ObjectID(item.owner) });
-      delete owner.hashedPassword;
+        const owner = await db
+          .collection("users")
+          .findOne({ _id: new ObjectID(item.owner) });
+        delete owner.hashedPassword;
 
-      res
-        .json({
-          ...item,
-          owner
-        })
-        .end();
-    });
+        res
+          .json({
+            ...item,
+            owner
+          })
+          .end();
+      })
+    );
 
     app.get("/me", authenticate, (req, res) => {
       res.json(req.user).end();
     });
 
-    app.get("/users/:id", authenticate, async (req, res) => {
-      const user = await db
-        .collection("users")
-        .findOne({ _id: new ObjectID(req.params.id) });
-      delete user.hashedPassword;
+    app.post(
+      "/me",
+      authenticate,
+      catchPromise(async (req, res) => {
+        await db
+          .collection("users")
+          .updateOne({ _id: new ObjectID(req.user._id) }, { $set: req.body });
+        res.json({ success: true }).end();
+      })
+    );
 
-      res.json(user).end();
-    });
+    app.get(
+      "/users/:id",
+      authenticate,
+      catchPromise(async (req, res) => {
+        const user = await db
+          .collection("users")
+          .findOne({ _id: new ObjectID(req.params.id) });
+        delete user.hashedPassword;
+
+        res.json(user).end();
+      })
+    );
 
     db.collection("users").createIndex({ email: 1 }, { unique: true }, err => {
       if (err) {
