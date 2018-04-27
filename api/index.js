@@ -2,7 +2,7 @@ const crypto = require("crypto");
 
 const express = require("express");
 const app = express();
-const { MongoClient } = require("mongodb");
+const { MongoClient, GridFSBucket } = require("mongodb");
 const { verify, sign } = require("jsonwebtoken");
 
 app.use(express.json());
@@ -24,6 +24,7 @@ const client = MongoClient.connect(
     }
 
     const db = client.db("cufflink");
+    const bucket = new GridFSBucket(db);
 
     app.post("/signup", (req, res) => {
       if (
@@ -63,7 +64,7 @@ const client = MongoClient.connect(
           .catch(err => {
             res
               .status(400)
-              .json({ success: false })
+              .json({ error: "Email must be unique." })
               .end();
           });
       }
@@ -145,48 +146,63 @@ const client = MongoClient.connect(
       }
     };
 
-    app.get("/items", authenticate, (req, res) => {
-      res
-        .json([
-          {
-            _id: "1",
-            title: "A Suit",
-            price: 12.5,
-            unitForPrice: "perDay",
-            thumbnail:
-              "https://davidreevesbespoke.files.wordpress.com/2011/03/me-24.jpg"
-          }
-        ])
-        .end();
+    app.get("/items", authenticate, async (req, res) => {
+      const items = await db
+        .collection("items")
+        .find()
+        .toArray()
+        .map(item => ({
+          _id: item._id,
+          title: item.title,
+          price: item.price,
+          unitForPrice: item.unitForPrice,
+          thumbnail: item.pictures[0]
+        }));
+
+      res.json(items).end();
     });
 
-    app.get("/items/1", authenticate, (req, res) => {
+    app.post("/items", authenticate, async (req, res) => {
+      await db.collection("items").insertOne({
+        ...req.body,
+        owner: req.user._id
+      });
+
+      res.json({ success: true }).end();
+    });
+
+    app.post("/upload", authenticate, (req, res) => {
+      if (req.get("Content-Type") !== "image/jpeg") {
+        res
+          .status(400)
+          .json({ error: "Only JPEG file uploads are supported" })
+          .end();
+      } else {
+        const name = crypto.randomBytes(24).toString("hex");
+        req.pipe(bucket.openUploadStream(name)).on("finish", () => {
+          res.json({ url: `/photos/${name}` }).end();
+        });
+      }
+    });
+
+    app.get("/photos/:name", authenticate, (req, res) => {
+      res.header("Content-Type", "image/jpeg");
+      bucket.openDownloadStreamByName(req.params.name).pipe(res);
+    });
+
+    app.get("/items/:id", authenticate, async (req, res) => {
+      const item = await db.collection("items").findOne({ _id: req.params.id });
+      const owner = await db.collection("users").findOne({ _id: item.owner });
       res
         .json({
-          _id: "1",
-          title: "A Suit",
-          price: 12.5,
-          thumbnail:
-            "https://davidreevesbespoke.files.wordpress.com/2011/03/me-24.jpg",
-          description: "This is my fancy suit that you can rent",
-          unitForPrice: "perDay",
-          pictures: [
-            "https://davidreevesbespoke.files.wordpress.com/2011/03/me-24.jpg",
-            "https://davidreevesbespoke.files.wordpress.com/2011/12/me-52.jpg",
-            "http://previewcf.turbosquid.com/Preview/2014/07/11__17_30_20/Suit2_2.jpgf5a003e9-fc72-4c69-be5a-5f05c2be6e00Original.jpg"
-          ],
-          owner: {
-            email: "joe@gmail.com",
-            name: "Joe",
-            zipcode: 24060
-          }
+          ...item,
+          owner
         })
         .end();
     });
 
     // app.get("/users");
     // app.get("/users/:id");
-    // app.post("/items");
 
     db.collection("users").createIndex({ email: 1 }, { unique: true }, err => {
       if (err) {
