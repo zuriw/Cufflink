@@ -10,10 +10,13 @@ import UIKit
 import CoreLocation
 
 class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
+    
+    // Obtain the object reference to the App Delegate object
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
 
     var items: [Item] = []
     var itemId: String! = nil
+    var userLocation = CLLocation()
 
     let tableViewRowHeight: CGFloat = 70.0
 
@@ -34,6 +37,85 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
             messageBody: "Turn Location Services On in your device settings to be able to use location services!")
             return
         }
+        
+        // We will use Option 1: Request user's authorization while the app is being used.
+        locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied {
+            userAuthorizedLocationMonitoring = false
+        } else {
+            userAuthorizedLocationMonitoring = true
+        }
+        
+        if !userAuthorizedLocationMonitoring {
+            
+            // User does not authorize location monitoring
+            showAlertMessage(messageHeader: "Authorization Denied!",
+                             messageBody: "Unable to determine current location!")
+            return
+        }
+       
+        // Set the current view controller to be the delegate of the location manager object
+        locationManager.delegate = self
+        
+        // Set the location manager's distance filter to kCLDistanceFilterNone implying that
+        // a location update will be sent regardless of movement of the device
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        
+        // Set the location manager's desired accuracy to be the best
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        // Start the generation of updates that report the user’s current location.
+        // Implement the CLLocationManager Delegate Methods below to receive and process the location info.
+        
+        locationManager.startUpdatingLocation()
+        
+    }
+    
+    
+    /*
+     ------------------------------------------
+     MARK: - CLLocationManager Delegate Methods
+     ------------------------------------------
+     */
+    // Tells the delegate that a new location data is available
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        /*
+         The objects in the given locations array are ordered with respect to their occurrence times.
+         Therefore, the most recent location update is at the end of the array; hence, we access the last object.
+         */
+        let lastObjectAtIndex = locations.count - 1
+        let currentLocation: CLLocation = locations[lastObjectAtIndex] as CLLocation
+        
+        // Obtain current location's coordinate
+        userLocation = currentLocation
+        
+        // Stops the generation of location updates since we do not need it anymore
+        manager.stopUpdatingLocation()
+        
+        // To make sure that it really stops updating the location, set its delegate to nil
+        locationManager.delegate = nil
+        
+        
+    }
+    
+    /*
+     ------------------------
+     MARK: - Location Manager
+     ------------------------
+     */
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        
+        // Stops the generation of location updates since error occurred
+        manager.stopUpdatingLocation()
+        
+        // To make sure that it really stops updating the location, set its delegate to nil
+        locationManager.delegate = nil
+        
+        showAlertMessage(messageHeader: "Unable to Locate You!",
+                         messageBody: "An error occurred while trying to determine your location: \(error.localizedDescription)")
+        return
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +143,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
         return items.count
     }
     
+    
+    //Load Table View
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Home Item Cell", for: indexPath) as! HomeTableViewCell
 
@@ -167,6 +251,9 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
 
             // Pass the ID of the item to pull to the downstream view controller object
             itemDetailsViewController.itemId = itemId
+            
+            //Pass current User location to the downstream view controller object
+            itemDetailsViewController.userLocationPassed = userLocation
         }
     }
     

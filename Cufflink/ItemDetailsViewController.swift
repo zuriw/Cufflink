@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import CoreLocation
+import MessageUI
 
-class ItemDetailsViewController: UIViewController {
+class ItemDetailsViewController: UIViewController, MFMessageComposeViewControllerDelegate {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var imagesPageControl: UIPageControl!
     @IBOutlet var priceLabel: UILabel!
@@ -24,10 +26,10 @@ class ItemDetailsViewController: UIViewController {
     var item: ItemDetails!
     var timer: Timer!
     var updateCounter: Int!
+    var userLocationPassed = CLLocation()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //get current locaton --> distance
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -57,8 +59,25 @@ class ItemDetailsViewController: UIViewController {
             self.updateTimer()
             self.descriptionTextView.text! = self.item.details
             self.ownerNameLabel.text = self.item.owner.name()
-
             self.navigationItem.title = self.item.title
+            let address = self.item.owner.location
+            
+            let geoCoder = CLGeocoder()
+            geoCoder.geocodeAddressString(address) { (placemarks, error) in
+                guard
+                    let placemarks = placemarks,
+                    let ownerLocation = placemarks.first?.location
+                    else {
+                        // handle no location found
+                        self.distanceLabel.text = "unknown Miles away"
+                        return
+                }
+                
+                // Calculate distance between user and owner in miles
+                self.distanceLabel.text = String(format: "%.1f", self.userLocationPassed.distance(from: ownerLocation) / 1609.34) + " Miles away"
+                
+            }
+
         }
     }
 
@@ -82,15 +101,34 @@ class ItemDetailsViewController: UIViewController {
         performSegue(withIdentifier: "Show Owner Profile", sender: self)
     }
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func messageButtonTapped(_ sender: UIButton) {
+        if !MFMessageComposeViewController.canSendText() {
+            showAlertMessage(messageHeader: "Error", messageBody: "SMS services are not available!")
+            return
+        }
+        let composeVC = MFMessageComposeViewController()
+        composeVC.messageComposeDelegate = self
+        
+        // Configure the fields of the interface.
+        composeVC.recipients = [self.item.owner.phone]
+        composeVC.body = "Hello! My name is Jeff. I am interested in  " + self.item.title +
+            "on Cufflink. Can we talk?"
+        
+        // Present the view controller modally.
+        self.present(composeVC, animated: true, completion: nil)
+
     }
-    */
+    
+    func messageComposeViewController(_ controller: MFMessageComposeViewController,
+                                      didFinishWith result: MessageComposeResult) {
+        // Check the result or perform other tasks.
+        
+        // Dismiss the message compose view controller.
+        controller.dismiss(animated: true, completion: nil)
+        
+    }
+    
     /*
      -------------------------
      MARK: - Prepare For Segue
@@ -112,4 +150,25 @@ class ItemDetailsViewController: UIViewController {
             
         }
     }
+    
+    /*
+     -----------------------------
+     MARK: - Display Alert Message
+     -----------------------------
+     */
+    func showAlertMessage(messageHeader header: String, messageBody body: String) {
+        
+        /*
+         Create a UIAlertController object; dress it up with title, message, and preferred style;
+         and store its object reference into local constant alertController
+         */
+        let alertController = UIAlertController(title: header, message: body, preferredStyle: UIAlertControllerStyle.alert)
+        
+        // Create a UIAlertAction object and add it to the alert controller
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        // Present the alert controller
+        present(alertController, animated: true, completion: nil)
+    }
+
 }

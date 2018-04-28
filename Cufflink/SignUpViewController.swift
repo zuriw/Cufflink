@@ -11,9 +11,14 @@ import UIKit
 class SignUpViewController: UIViewController {
     @IBOutlet var firstNameTextField: UITextField!
     @IBOutlet var lastNameTextField: UITextField!
+    @IBOutlet var phoneNumberTextField: UITextField!
     @IBOutlet var emailTextField: UITextField!
+    @IBOutlet var addressTextField: UITextField!
+    @IBOutlet var cityTextField: UITextField!
+    @IBOutlet var stateTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var confirmPasswordTextField: UITextField!
+    
     // Obtain the object reference to the App Delegate object
     let applicationDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -30,38 +35,26 @@ class SignUpViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     @IBAction func submitButtonTapped(_ sender: Any) {
-        let firstName = firstNameTextField.text!
-        let lastName = lastNameTextField.text!
-        let email = emailTextField.text!
-        let password = passwordTextField.text!
+        let firstNameObtained = firstNameTextField.text!
+        let lastNameObtained = lastNameTextField.text!
+        let phoneObtained = phoneNumberTextField.text!
+        let addressObtained = addressTextField.text!
+        let cityObtained = cityTextField.text!
+        let stateObtained = stateTextField.text!
+        let emailObtained = emailTextField.text!
+        let passwordObtained = passwordTextField.text!
+        
+        let location = addressObtained + ", " + cityObtained + ", " + stateObtained
         
         //NEEDS TO BE TESTED, AND ADD MORE VALIDATION
         /*********************
          Input Data Validation
          *********************/
-        if firstName.isEmpty{
-            showAlertMessage(messageHeader: "No First Name Entered!", messageBody: "Please enter a First Name!")
-            return
-        }
         
-        if lastName.isEmpty{
-            showAlertMessage(messageHeader: "No Last Name Entered!", messageBody: "Please enter a Last Name!")
-            return
-        }
-        
-        if !isValidEmail(testStr: email){
+        if !isValidEmail(testStr: emailObtained){
             showAlertMessage(messageHeader: "Invalid Email Entered!", messageBody: "Please enter a valid email")
-            return
-        }
-        
-        if userEmails.contains(email) {
-            showAlertMessage(messageHeader: "Account Found!", messageBody: "Cannot create multiple accounts using the same email")
-            return
-        }
-        
-        if password.isEmpty{
-            showAlertMessage(messageHeader: "No Password Entered!", messageBody: "Please enter a Password!")
             return
         }
         
@@ -70,30 +63,58 @@ class SignUpViewController: UIViewController {
             return
         }
         
-        let fullName = firstName + " " + lastName
+        //phone number validation
+        //Need State validation
+        //Need Location validation ...
         
-        /*
-         ------------------------------------------------------
-         Create an array containing all of the user data.
-         ------------------------------------------------------
-         */
-        let userData = [fullName, password, email]
+        /***************************
+         Indicate Activity is loading
+         ****************************/
         
-        /*
-         ---------------------------------------------------------------------
-         Add the created array under the email key to the dictionary
-         dict_UserEmail_UserData held by the app delegate object.
-         ---------------------------------------------------------------------
-         */
-        //applicationDelegate.dict_UserEmail_UserData.setObject(userData, forKey: email as NSCopying)
+        //Create Activity Indicator
+        let myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         
-        //userEmails = applicationDelegate.dict_UserEmail_UserData.allKeys as! [String]
+        //Position Activity Indicator in the center of the main view
+        myActivityIndicator.center = view.center
         
-        // Sort the userEmails within itself in alphabetical order
-        userEmails.sort { $0 < $1 }
+        myActivityIndicator.hidesWhenStopped = false
         
+        //Start Activity Indicator
+        myActivityIndicator.startAnimating()
         
+        view.addSubview(myActivityIndicator)
         
+        //send HTTP request to perform Log in
+        self.applicationDelegate.signUp(firstName: firstNameObtained, lastName: lastNameObtained, phone: phoneObtained, email: emailObtained, location: location, password: passwordObtained) { (success) in
+            myActivityIndicator.stopAnimating()
+            myActivityIndicator.removeFromSuperview()
+            if success == false {
+                // show user alert when login credentials are incorrect
+                self.showAlertMessage(
+                    messageHeader: "Invalid SignUp!",
+                    messageBody: "Required fields not completed or account already exist"
+                )
+                return
+            } else {
+                //Log in to get a token
+                //send HTTP request to perform Log in
+                self.applicationDelegate.login(email: emailObtained, password: passwordObtained) { (success) in
+                    myActivityIndicator.stopAnimating()
+                    myActivityIndicator.removeFromSuperview()
+                    if success == false {
+                        // show user alert when login credentials are incorrect
+                        self.showAlertMessage(
+                            messageHeader: "Error",
+                            messageBody: "Something is wrong..."
+                        )
+                        return
+                    } else {
+                        self.performSegue(withIdentifier: "Show Congrats", sender: self)
+                    }
+                }
+                
+            }
+        }
     }
     
 
@@ -106,6 +127,29 @@ class SignUpViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
+    /*
+     ------------------------
+     MARK: - IBAction Methods
+     ------------------------
+     */
+    @IBAction func keyboardDone(_ sender: UITextField) {
+        
+        // When the Text Field resigns as first responder, the keyboard is automatically removed.
+        sender.resignFirstResponder()
+    }
+    
+    @IBAction func backgroundTouch(_ sender: UIControl) {
+        /*
+         "This method looks at the current view and its subview hierarchy for the text field that is
+         currently the first responder. If it finds one, it asks that text field to resign as first responder.
+         If the force parameter is set to true, the text field is never even asked; it is forced to resign." [Apple]
+         
+         When the Text Field resigns as first responder, the keyboard is automatically removed.
+         */
+        view.endEditing(true)
+    }
     
     /*
      -----------------------------
