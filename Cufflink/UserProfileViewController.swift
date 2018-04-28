@@ -15,11 +15,11 @@ class UserProfileViewController: UIViewController{
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var userGeneralLocationLabel: UILabel!
     @IBOutlet var distanceLabel: UILabel!
-    var ownerPassed = User(name: "", email: "", image: "", phone: "", location: 0)
+    var ownerPassed: User!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        userNameLabel.text! = ownerPassed.name
+        userNameLabel.text! = ownerPassed.name()
         userImageView.layer.borderWidth = 1
         userImageView.layer.masksToBounds = false
         userImageView.layer.borderColor = UIColor.white.cgColor

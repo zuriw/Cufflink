@@ -9,8 +9,6 @@
 import UIKit
 
 class ItemDetailsViewController: UIViewController {
-
-    var itemPassed = Item(title: "", images: [], id: "", available: false, price: 0, priceUnit: "", details: "", Owner: User(name: "", email: "", image: "", phone: "", location: 0))
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var imagesPageControl: UIPageControl!
     @IBOutlet var priceLabel: UILabel!
@@ -20,57 +18,60 @@ class ItemDetailsViewController: UIViewController {
     @IBOutlet var distanceLabel: UILabel!
     @IBOutlet var messageButton: UIButton!
     @IBOutlet var itemImageView: UIImageView!
-    var ownerToPass = User(name: "", email: "", image: "", phone: "", location: 0)
+
+    var appDelegate = UIApplication.shared.delegate as! AppDelegate
+    var itemId: String!
+    var item: ItemDetails!
     var timer: Timer!
     var updateCounter: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imagesPageControl.numberOfPages = itemPassed.images.count
-        updateCounter = 0
-        timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(ItemDetailsViewController.updateTimer), userInfo: nil, repeats: true)
-        titleLabel.text! = itemPassed.title
-        switch itemPassed.priceUnit{
-        case "perDay":
-            priceLabel.text! = "$" + String(describing: itemPassed.price) + "/ Day"
-            break
-        case "perHour":
-            priceLabel.text! = "$" + String(describing: itemPassed.price) + "/ Price"
-            break
-        default:
-            break
-        }
-        updateTimer()
-        descriptionTextView.text! = itemPassed.details
-        ownerNameLabel.text = itemPassed.Owner.name
         //get current locaton --> distance
-        
-        
-        
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        self.appDelegate.requestUrl("/items/\(itemId!)", nil) { (body, response) in
+            self.item = ItemDetails(body as! NSDictionary)
+
+            self.imagesPageControl.numberOfPages = self.item.pictures.count
+            self.updateCounter = 0
+            self.timer = Timer.scheduledTimer(
+                timeInterval: 2.0,
+                target: self,
+                selector: #selector(ItemDetailsViewController.updateTimer),
+                userInfo: nil,
+                repeats: true
+            )
+            self.titleLabel.text! = self.item.title
+            switch self.item.unitForPrice {
+            case "perDay":
+                self.priceLabel.text! = "$" + String(describing: self.item.price) + "/ Day"
+                break
+            case "perHour":
+                self.priceLabel.text! = "$" + String(describing: self.item.price) + "/ Price"
+                break
+            default:
+                break
+            }
+            self.updateTimer()
+            self.descriptionTextView.text! = self.item.details
+            self.ownerNameLabel.text = self.item.owner.name()
+
+            self.navigationItem.title = self.item.title
+        }
+    }
+
     @objc internal func updateTimer(){
-        if updateCounter < itemPassed.images.count{
+        if updateCounter < self.item.pictures.count {
             imagesPageControl.currentPage = updateCounter
             // Set Item Image
-            if itemPassed.images[updateCounter] == ""{
-                print("no thumbnail")
-            }else{
-                let url = URL(string: itemPassed.images[updateCounter])
-                let itemImageData = try? Data(contentsOf: url!)
-                if let imageData = itemImageData {
-                    itemImageView!.image = UIImage(data: imageData)
-                } else {
-                    print("no thumbnail")
-                }
-            }
+            itemImageView!.image = self.item.pictures[updateCounter]
             updateCounter = updateCounter + 1
-        }else{
+        } else {
             updateCounter = 0
         }
     }
-    
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -78,10 +79,9 @@ class ItemDetailsViewController: UIViewController {
     }
     
     @IBAction func ownerImageButtonTapped(_ sender: UIButton) {
-        ownerToPass = itemPassed.Owner
         performSegue(withIdentifier: "Show Owner Profile", sender: self)
     }
-    
+
     /*
     // MARK: - Navigation
 
@@ -107,8 +107,8 @@ class ItemDetailsViewController: UIViewController {
             let userProfileViewController: UserProfileViewController = segue.destination as! UserProfileViewController
             
             // Pass the data object to the downstream view controller object
-            userProfileViewController.ownerPassed = ownerToPass
-            userProfileViewController.navigationItem.title = ownerToPass.name
+            userProfileViewController.ownerPassed = item.owner
+            userProfileViewController.navigationItem.title = item.owner.name()
             
         }
     }

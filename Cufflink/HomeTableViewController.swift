@@ -9,47 +9,21 @@
 import UIKit
 import CoreLocation
 
-struct Item {
-    let title: String
-    var images: [String]
-    let id: String
-    var available: Bool
-    let price: NSNumber
-    let priceUnit: String
-    var details: String
-    var Owner: User
-    
-}
-
-struct User{
-    let name: String
-    let email: String
-    let image: String
-    let phone: String
-    let location: NSNumber
-}
-
-
 class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
-
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
-    var itemIDs = [String]()
-    var dict_id_item = [String: Item]()
-    var session = URLSession.shared
-    var itemToPass = Item(title: "", images: [], id: "", available: false, price: 0, priceUnit: "", details: "", Owner: User(name: "", email: "", image: "", phone: "", location: 0))
+
+    var items: [Item] = []
+    var itemId: String! = nil
+
     let tableViewRowHeight: CGFloat = 70.0
-    
+
     // Instantiate a CLLocationManager object
     var locationManager = CLLocationManager()
-    
+
     var userAuthorizedLocationMonitoring = false
     @IBOutlet var homeTableView: UITableView!
     
-    
     override func viewDidLoad() {
-
-        itemIDs = Array(appDelegate.items.keys)
-        dict_id_item = appDelegate.items
         super.viewDidLoad()
         /*
          The user can turn off location services on an iOS device in Settings.
@@ -59,6 +33,14 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
             showAlertMessage(messageHeader: "Location Services Disabled!",
             messageBody: "Turn Location Services On in your device settings to be able to use location services!")
             return
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        self.appDelegate.requestUrl("/items", nil) { (body, response) in
+            let array = body as! [NSDictionary]
+            self.items = array.map { Item($0) }
+            self.tableView.reloadData()
         }
     }
 
@@ -76,41 +58,20 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return itemIDs.count
+        return items.count
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let rowNumber = (indexPath as NSIndexPath).row
-        let cell: HomeTableViewCell = tableView.dequeueReusableCell(withIdentifier: "Home Item Cell") as! HomeTableViewCell
-        
-        //Get item ID
-        let id = itemIDs[rowNumber]
-        
-        //Get item
-        var item = dict_id_item[id]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Home Item Cell", for: indexPath) as! HomeTableViewCell
+
+        let item = items[indexPath.row]
         
         // Set Item Thumbnail
-        if item!.images[0] == ""{
-            //cell.itemImageView!.image = UIImage(named: "noPosterImage.png")
-            print("no thumbnail")
-        }else{
-            let url = URL(string: item!.images[0])
-            let itemImageData = try? Data(contentsOf: url!)
-            
-            if let imageData = itemImageData {
-                cell.itemImageView!.image = UIImage(data: imageData)
-            } else {
-                //cell.itemImageView!.image = UIImage(named: "noPosterImage.png")
-                print("no thumbnail")
-            }
-        }
+        cell.itemImageView!.image = item.thumbnail
         
-        cell.itemTitleLabel!.text = item!.title
-        cell.itemPriceLabel!.text = String(describing: item!.price)
+        cell.itemTitleLabel!.text = item.title
+        cell.itemPriceLabel!.text = String(item.price)
         //cell.itemPriceUnitLabel!.t
-        // Configure the cell...
 
         return cell
     }
@@ -135,20 +96,10 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
     
     // Tapping a row (Item) displays Item Details
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let rowNumber = (indexPath as NSIndexPath).row
-        
         //Get Item ID
-        let id = itemIDs[rowNumber]
-        
-        // Obtain the item
-        let item = dict_id_item[id]
-        
-        //Pass item to itemToPass
-        itemToPass = item!
+        itemId = items[indexPath.row].id
         
         performSegue(withIdentifier: "Show Item Details", sender: self)
-        
     }
     
     
@@ -198,7 +149,6 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
     */
     
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
-        
         performSegue(withIdentifier: "Add Item", sender: self)
     }
     
@@ -211,19 +161,12 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
     // This method is called by the system whenever you invoke the method performSegueWithIdentifier:sender:
     // You never call this method. It is invoked by the system.
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
-        
         if segue.identifier == "Show Item Details" {
-            
             // Obtain the object reference of the destination view controller
             let itemDetailsViewController: ItemDetailsViewController = segue.destination as! ItemDetailsViewController
-            
-            // Pass the data object to the downstream view controller object
-            itemDetailsViewController.itemPassed = itemToPass
-            itemDetailsViewController.navigationItem.title = itemToPass.title
-            
-        }else if segue.identifier == "Add Item"{
-            
-            
+
+            // Pass the ID of the item to pull to the downstream view controller object
+            itemDetailsViewController.itemId = itemId
         }
     }
     

@@ -105,144 +105,21 @@ class LogInViewController: UIViewController {
         view.addSubview(myActivityIndicator)
         
         //send HTTP request to perform Log in
-
         self.appDelegate.login(email: emailObtained, password: passwordObtained) { (success) in
+            myActivityIndicator.stopAnimating()
+            myActivityIndicator.removeFromSuperview()
             if success == false {
-                myActivityIndicator.stopAnimating()
-                myActivityIndicator.removeFromSuperview()
+                // show user alert when login credentials are incorrect
                 self.showAlertMessage(
                     messageHeader: "Invalid Login!",
                     messageBody: "Username or password incorrect"
                 )
                 return
             } else {
-                self.appDelegate.requestUrl("http://cufflink-api-ksdqlxufqo.now.sh/items", nil) { (body, response) in
-                    if let array = body as? NSArray{
-                        //print(array)
-
-                        let dict = array[0] as! NSDictionary
-                        let id = dict["_id"] as! String
-
-                        //Get Item Details from id
-                        self.appDelegate.requestUrl("http://cufflink-api-ksdqlxufqo.now.sh/items/\(String(id))", nil) { (body, response) in
-                            if let myItem = body as? NSDictionary{
-                                let title = myItem["title"] as! String
-                                let imageUrls = myItem["pictures"] as! NSArray
-                                let price = myItem["price"] as! NSNumber
-                                let id = myItem["_id"] as! String
-                                let priceUnit = myItem["unitForPrice"] as! String
-                                let description = myItem["description"] as! String
-                                var myOwner = NSDictionary()
-                                myOwner = myItem["owner"] as! NSDictionary
-                                let user = User(name: myOwner["name"] as! String, email: myOwner["email"] as! String, image: "", phone: "", location: myOwner["zipcode"] as! NSNumber)
-
-                                let item = Item(title: title, images: imageUrls as! [String], id: id, available: false, price: price, priceUnit: priceUnit, details: description, Owner: user)
-                                self.appDelegate.items[id] = item
-
-                                myActivityIndicator.stopAnimating()
-                                myActivityIndicator.removeFromSuperview()
-
-                                self.performSegue(withIdentifier: "Show Home View", sender: self)
-                            }
-                        }
-                    }
-                }
+                self.performSegue(withIdentifier: "Show Home View", sender: self)
             }
         }
     }
-    
-    
-    
-    
-    
-    //        let url = URL(string: "https://cufflink-api-ksdqlxufqo.now.sh/login")
-    //        var request = URLRequest(url: url!)
-    //        request.httpMethod = "POST"
-    //        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-    //        do {
-    //            request.httpBody = try JSONSerialization.data(withJSONObject: [
-    //                "email": emailObtained,
-    //                "password": passwordObtained
-    //            ], options: [])
-    //            let task = appDelegate.session.dataTask(with: request) { (data, response, _) in
-    //                let httpResponse = response! as! HTTPURLResponse
-    //                do {
-    //                    if (httpResponse.statusCode == 200) {
-    //                        let values = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: String];
-    //                        print(values["token"] as String!)
-    //                        self.token = values["token"] as String!
-    //
-    //
-    //                        let url = URL(string: "http://cufflink-api.now.sh/items")
-    //                        let task = self.appDelegate.session.dataTask(with: url!) { (data,_,_) in
-    //                            guard let data = data else {return}
-    //                            do{
-    //                                let json = try JSONSerialization.jsonObject(with: data, options: [])
-    //                                //print(json)
-    //                                if let array = json as? NSArray{
-    //                                    //print(array)
-    //
-    //                                    let dict = array[0] as! NSDictionary
-    //                                    let id = dict["_id"] as! String
-    //
-    //                                    //Get Item Details from id
-    //                                    self.requestUrl("http://cufflink-api.now.sh/items/\(String(id))", nil) { (data,_,_) in
-    //                                        guard let data = data else {return}
-    //                                        do{
-    //                                            let json = try JSONSerialization.jsonObject(with: data, options: [])
-    //                                            if let myItem = json as? NSDictionary{
-    //                                                let title = myItem["title"] as! String
-    //                                                let imageUrls = myItem["pictures"] as! NSArray
-    //                                                let price = myItem["price"] as! NSNumber
-    //                                                let id = myItem["_id"] as! String
-    //                                                let priceUnit = myItem["unitForPrice"] as! String
-    //                                                let description = myItem["description"] as! String
-    //                                                var myOwner = NSDictionary()
-    //                                                myOwner = myItem["owner"] as! NSDictionary
-    //                                                let user = User(name: myOwner["name"] as! String, email: myOwner["email"] as! String, image: "", phone: "", location: myOwner["zipcode"] as! NSNumber)
-    //
-    //                                                let item = Item(title: title, images: imageUrls as! [String], id: id, available: false, price: price, priceUnit: priceUnit, details: description, Owner: user)
-    //                                                self.items[id] = item
-    //                                                self.appDelegate.items = self.items
-    //                                                DispatchQueue.main.async {
-    //                                                    self.performSegue(withIdentifier: "Show Home View", sender: self)
-    //                                                }
-    //
-    //                                            }
-    //                                        } catch {}
-    //
-    //                                    }
-    //                                }
-    //
-    //                            } catch {}
-    //
-    //                        }
-    //                        task.resume()
-    //
-    //                    } else if httpResponse.statusCode == 400 {
-    //                        DispatchQueue.main.async {
-    //                            self.showAlertMessage(
-    //                                messageHeader: "Invalid Login Credentials!",
-    //                                messageBody: "Please enter a correct email and password"
-    //                            )
-    //                        }
-    //                        print("fail")
-    //                    } else {
-    //                        print(httpResponse)
-    //                        print(String(data: data!, encoding: .utf8)!)
-    //                    }
-    //                } catch {
-    //                    print(error)
-    //                }
-    //            }
-    //            task.resume()
-    //        } catch {
-    //            print(error)
-    //        }
-    
-    //}
-    
-    
 }
 
 

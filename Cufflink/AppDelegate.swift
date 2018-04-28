@@ -8,15 +8,84 @@
 
 import UIKit
 
+struct Item {
+    let id: String
+    let title: String
+    let price: Double
+    let unitForPrice: String
+    let thumbnail: UIImage
+
+    init(_ itemDictionary: NSDictionary) {
+        let thumbnail = itemDictionary.value(forKey: "thumbnail")! as! String
+        let url = URL(string: thumbnail)!
+        let thumbnailData = try? Data(contentsOf: url)
+
+        self.id = itemDictionary.value(forKey: "_id")! as! String
+        self.title = itemDictionary.value(forKey: "title")! as! String
+        self.price = (itemDictionary.value(forKey: "price")! as! NSNumber).doubleValue
+        self.unitForPrice = itemDictionary.value(forKey: "unitForPrice")! as! String
+        self.thumbnail = UIImage(data: thumbnailData!)!
+    }
+}
+
+struct ItemDetails {
+    let id: String
+    let title: String
+    let price: Double
+    let unitForPrice: String
+    let pictures: [UIImage]
+    let details: String
+    let owner: User
+
+    init(_ itemDictionary: NSDictionary) {
+        let imageArray = itemDictionary.value(forKey: "pictures")! as! [String]
+
+        self.id = itemDictionary.value(forKey: "_id")! as! String
+        self.title = itemDictionary.value(forKey: "title")! as! String
+        self.price = (itemDictionary.value(forKey: "price")! as! NSNumber).doubleValue
+        self.unitForPrice = itemDictionary.value(forKey: "unitForPrice")! as! String
+        self.pictures = imageArray.map {
+            let url = URL(string: $0)!
+            let imageData = try? Data(contentsOf: url)
+            return UIImage(data: imageData!)!
+        }
+        self.details = (itemDictionary.value(forKey: "details") as! String?) ?? "No details provided."
+        self.owner = User(itemDictionary.value(forKey: "owner")! as! NSDictionary)
+    }
+}
+
+struct User {
+    let id: String
+    let firstName: String
+    let lastName: String
+    let email: String
+    let profile: String
+    let phone: String
+    let location: String
+
+    init(_ itemDictionary: NSDictionary) {
+        self.id = itemDictionary.value(forKey: "_id")! as! String
+        self.firstName = (itemDictionary.value(forKey: "firstName") as! String?) ?? ""
+        self.lastName = (itemDictionary.value(forKey: "lastName") as! String?) ?? ""
+        self.email = (itemDictionary.value(forKey: "email") as! String?) ?? ""
+        self.profile = (itemDictionary.value(forKey: "profile") as! String?) ?? ""
+        self.phone = (itemDictionary.value(forKey: "phone") as! String?) ?? ""
+        self.location = (itemDictionary.value(forKey: "location") as! String?) ?? ""
+    }
+
+    func name() -> String {
+        return "\(self.firstName) \(self.lastName)"
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var token: String!
-    var items = [String: Item]()
 
     func login(email: String, password: String, completionHandler: @escaping (Bool) -> Void) {
-        let url = URL(string: "https://cufflink-api-ksdqlxufqo.now.sh/login")
+        let url = URL(string: "https://cufflink-api.now.sh/login")
 
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
@@ -61,8 +130,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         task.resume()
     }
 
-    func requestUrl(_ string: String, _ body: Any?, completionHandler: @escaping (Any, HTTPURLResponse) -> Void) {
-        let url = URL(string: string)
+    func requestUrl(_ path: String, _ body: Any?, completionHandler: @escaping (Any, HTTPURLResponse) -> Void) {
+        let url = URL(string: "https://cufflink-api.now.sh\(path)")
 
         var request = URLRequest(url: url!)
         request.httpMethod = body == nil ? "GET" : "POST"
@@ -203,7 +272,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          It gains focus after being launched, loses focus when an overlay window pops up or when the device is
          locked, and gains focus when the device is unlocked." [Apple]
          */
-        
+
 //        // Define the file path to the CompaniesILike.plist file in the Document directory
 //        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
 //        let documentDirectoryPath = paths[0] as String
