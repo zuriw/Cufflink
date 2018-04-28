@@ -44,17 +44,19 @@ const client = MongoClient.connect(
         req.body.firstName == null ||
         req.body.lastName == null ||
         req.body.location == null ||
+        req.body.phone == null ||
         req.body.email.trim() === "" ||
         req.body.password.trim() === "" ||
         req.body.firstName.trim() === "" ||
         req.body.lastName.trim() === "" ||
-        req.body.location.trim() === ""
+        req.body.location.trim() === "" ||
+        req.body.phone.trim() === ""
       ) {
         res
           .status(400)
           .json({
             error:
-              "Email, firstName, lastName, location and password are required to be non-blank."
+              "Email, firstName, lastName, phone, location and password are required to be non-blank."
           })
           .end();
       } else {
@@ -67,7 +69,8 @@ const client = MongoClient.connect(
             hashedPassword: hashPassword(password),
             location: req.body.location,
             firstName: req.body.firstName,
-            lastName: req.body.lastName
+            lastName: req.body.lastName,
+            phone: req.body.phone
           })
           .then(() => {
             res
