@@ -83,10 +83,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var token: String!
+   // var currentUser = User(NSDictionary())
 
     func login(email: String, password: String, completionHandler: @escaping (Bool) -> Void) {
         let url = URL(string: "https://cufflink-api.now.sh/login")
-
+//        self.requestUrl("/me", nil) { (body, response) in
+//            self.currentUser = User(body as! NSDictionary)
+//        }
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         // Setting the content-type as JSON
@@ -112,6 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 do {
                     let values = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: String]
                     self.token = values["token"]
+                    
                     DispatchQueue.main.async {
                         completionHandler(true)
                     }
@@ -119,6 +123,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print(error.localizedDescription)
                 }
             } else if httpResponse.statusCode == 400 {
+                DispatchQueue.main.async {
+                    completionHandler(false)
+                }
+            } else {
+                print(httpResponse)
+                print(String(data: data!, encoding: .utf8)!)
+            }
+        }
+        task.resume()
+    }
+    
+    func signUp(firstName: String, lastName: String, phone: String, email: String, location: String, password: String, completionHandler: @escaping (Bool) -> Void) {
+        let url = URL(string: "https://cufflink-api.now.sh/signup")
+        
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        // Setting the content-type as JSON
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        //Setting the result content-type as JSON
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let postString = [
+            "firstName": firstName,
+            "lastName": lastName,
+            "phone": phone,
+            "email": email,
+            "location": location,
+            "password": password
+            ] as [String: String]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: postString, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response: URLResponse?, error: Error?) in
+            let httpResponse = response! as! HTTPURLResponse
+            if (httpResponse.statusCode == 200) { //SUCCESS! good to go!
+                DispatchQueue.main.async {
+                    completionHandler(true)
+                }
+            } else if httpResponse.statusCode == 400 { //Missing information or already signed up
                 DispatchQueue.main.async {
                     completionHandler(false)
                 }

@@ -21,9 +21,16 @@
 		D54841B9208831440003F7AE /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54841B8208831440003F7AE /* AddItemViewController.swift */; };
 		D54841BB20898BF80003F7AE /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54841BA20898BF80003F7AE /* UserProfileViewController.swift */; };
 		D54841BE208A33080003F7AE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D54841BD208A33080003F7AE /* CoreLocation.framework */; };
+		D5D2ED1B209422EB00E04827 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D2ED1A209422EB00E04827 /* WelcomeViewController.swift */; };
+		D5D2ED1D20942DBA00E04827 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D2ED1C20942DB900E04827 /* MessageUI.framework */; };
+		D5D2ED1E209436C300E04827 /* NVActivityIndicatorView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D2ED1F209436C300E04827 /* NVActivityIndicatorView.framework */; };
+		F94DE3EDD08477051AD109EF /* Pods_Cufflink.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6103BDB51FB66E832DD1B280 /* Pods_Cufflink.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		267D95EE76AEE99F4D20107E /* Pods-Cufflink.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cufflink.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Cufflink/Pods-Cufflink.debug.xcconfig"; sourceTree = "<group>"; };
+		2BDDBC279F1A98ADBAA1627C /* Pods-Cufflink.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cufflink.release.xcconfig"; path = "Pods/Target Support Files/Pods-Cufflink/Pods-Cufflink.release.xcconfig"; sourceTree = "<group>"; };
+		6103BDB51FB66E832DD1B280 /* Pods_Cufflink.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cufflink.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D527B6E1203F2E5A00EB380E /* Cufflink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cufflink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D527B6E4203F2E5A00EB380E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D527B6E9203F2E5A00EB380E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -40,6 +47,9 @@
 		D54841B8208831440003F7AE /* AddItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
 		D54841BA20898BF80003F7AE /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		D54841BD208A33080003F7AE /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D5D2ED1A209422EB00E04827 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		D5D2ED1C20942DB900E04827 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		D5D2ED1F209436C300E04827 /* NVActivityIndicatorView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NVActivityIndicatorView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,19 +57,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5D2ED1E209436C300E04827 /* NVActivityIndicatorView.framework in Frameworks */,
+				D5D2ED1D20942DBA00E04827 /* MessageUI.framework in Frameworks */,
 				D54841BE208A33080003F7AE /* CoreLocation.framework in Frameworks */,
+				F94DE3EDD08477051AD109EF /* Pods_Cufflink.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		57416E1BB97DBE59DD955739 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				267D95EE76AEE99F4D20107E /* Pods-Cufflink.debug.xcconfig */,
+				2BDDBC279F1A98ADBAA1627C /* Pods-Cufflink.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		D527B6D8203F2E5A00EB380E = {
 			isa = PBXGroup;
 			children = (
 				D527B6E3203F2E5A00EB380E /* Cufflink */,
 				D527B6E2203F2E5A00EB380E /* Products */,
 				D54841BC208A33070003F7AE /* Frameworks */,
+				57416E1BB97DBE59DD955739 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -78,6 +101,7 @@
 				D527B6E4203F2E5A00EB380E /* AppDelegate.swift */,
 				D527B6F62040C57600EB380E /* LogInViewController.swift */,
 				D527B6F82040C58C00EB380E /* SignUpViewController.swift */,
+				D5D2ED1A209422EB00E04827 /* WelcomeViewController.swift */,
 				D531B548207BEC790021B08E /* HomeTableViewController.swift */,
 				D531B54F207BF8330021B08E /* HomeTableViewCell.swift */,
 				D531B551207F88080021B08E /* ItemDetailsViewController.swift */,
@@ -103,7 +127,10 @@
 		D54841BC208A33070003F7AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D5D2ED1F209436C300E04827 /* NVActivityIndicatorView.framework */,
+				D5D2ED1C20942DB900E04827 /* MessageUI.framework */,
 				D54841BD208A33080003F7AE /* CoreLocation.framework */,
+				6103BDB51FB66E832DD1B280 /* Pods_Cufflink.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -115,9 +142,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D527B6F3203F2E5A00EB380E /* Build configuration list for PBXNativeTarget "Cufflink" */;
 			buildPhases = (
+				765426395B496DE3E516322E /* [CP] Check Pods Manifest.lock */,
 				D527B6DD203F2E5A00EB380E /* Sources */,
 				D527B6DE203F2E5A00EB380E /* Frameworks */,
 				D527B6DF203F2E5A00EB380E /* Resources */,
+				0305A56688D39CFFDB625FAA /* [CP] Embed Pods Frameworks */,
+				44A15F151F01321C932CDF21 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -180,11 +210,66 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0305A56688D39CFFDB625FAA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Cufflink/Pods-Cufflink-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Cufflink/Pods-Cufflink-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		44A15F151F01321C932CDF21 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Cufflink/Pods-Cufflink-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		765426395B496DE3E516322E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Cufflink-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D527B6DD203F2E5A00EB380E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5D2ED1B209422EB00E04827 /* WelcomeViewController.swift in Sources */,
 				D531B550207BF8330021B08E /* HomeTableViewCell.swift in Sources */,
 				D54841BB20898BF80003F7AE /* UserProfileViewController.swift in Sources */,
 				D527B6F92040C58C00EB380E /* SignUpViewController.swift in Sources */,
@@ -327,6 +412,7 @@
 		};
 		D527B6F4203F2E5A00EB380E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 267D95EE76AEE99F4D20107E /* Pods-Cufflink.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -342,6 +428,7 @@
 		};
 		D527B6F5203F2E5A00EB380E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2BDDBC279F1A98ADBAA1627C /* Pods-Cufflink.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
