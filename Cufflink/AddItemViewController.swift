@@ -53,15 +53,20 @@ class AddItemViewController: UIViewController {
         if segue.identifier !=  "ChooseImage-Done"  {
             return
         }
+        
+        
         // Obtain the object reference of the source view controller
         let chooseImageViewController: ChooseImageViewController = segue.source as! ChooseImageViewController
         
         switch imageButtonTagToPass {
         case 1:
+            addImageOneButton.setTitle("", for: .normal)
             addImageOneButton.setBackgroundImage(chooseImageViewController.chosenImage1, for: .normal)
         case 2:
+            addImageTwoButton.setTitle("", for: .normal)
             addImageTwoButton.setBackgroundImage(chooseImageViewController.chosenImage2, for: .normal)
         case 3:
+            addImageThreeButton.setTitle("", for: .normal)
             addImageThreeButton.setBackgroundImage(chooseImageViewController.chosenImage3, for: .normal)
         default:
             return
@@ -83,7 +88,7 @@ class AddItemViewController: UIViewController {
         if segue.identifier == "Choose Image" {
             
             // Obtain the object reference of the source view controller
-            let chooseImageViewController: ChooseImageViewController = segue.source as! ChooseImageViewController
+            let chooseImageViewController: ChooseImageViewController = segue.destination as! ChooseImageViewController
             
             // Pass the data object to the downstream view controller object
             chooseImageViewController.imageButtonTagPassed = imageButtonTagToPass
@@ -93,16 +98,74 @@ class AddItemViewController: UIViewController {
     
     @IBAction func doneAddingButtonTapped(_ sender: UIButton) {
         //Add verification to this...
+        if itemTitleTextField.text == "" || itemPriceTextField.text == "" || itemDescriptionTextView.text == ""{
+            showAlertMessage(messageHeader: "Missing Required Fields!", messageBody: "Please enter all required fields for this item")
+            return
+        }
         
+        if addImageOneButton.backgroundImage(for: .normal) == nil && addImageTwoButton.backgroundImage(for: .normal) == nil && addImageThreeButton.backgroundImage(for: .normal) == nil{
+            showAlertMessage(messageHeader: "Missing Images!", messageBody: "Please add at least one image to your item")
+            return
+        }
+        
+        var unitForPrice = priceUnitSegmentControl.selectedSegmentIndex == 0 ? "perHour" : "perDay"
+        
+        
+        let postString = [
+            "title": itemTitleTextField.text!,
+            "price": itemPriceTextField.text!,
+            "unitForPrice": unitForPrice,
+            "description": itemDescriptionTextView.text
+        ] as [String: String]
+        
+        
+        self.appDelegate.requestUrl("/items", nil) { (body, response) in
+            let array = body as! [NSDictionary]
+            let allItems = array.map { Item($0) }
+        
+        }
     }
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+     ------------------------
+     MARK: - IBAction Methods
+     ------------------------
+     */
+    @IBAction func keyboardDone(_ sender: UITextField) {
+        
+        // When the Text Field resigns as first responder, the keyboard is automatically removed.
+        sender.resignFirstResponder()
     }
-    */
-
+    
+    @IBAction func backgroundTouch(_ sender: UIControl) {
+        /*
+         "This method looks at the current view and its subview hierarchy for the text field that is
+         currently the first responder. If it finds one, it asks that text field to resign as first responder.
+         If the force parameter is set to true, the text field is never even asked; it is forced to resign." [Apple]
+         
+         When the Text Field resigns as first responder, the keyboard is automatically removed.
+         */
+        view.endEditing(true)
+    }
+    
+    /*
+     -----------------------------
+     MARK: - Display Alert Message
+     -----------------------------
+     */
+    func showAlertMessage(messageHeader header: String, messageBody body: String) {
+        
+        /*
+         Create a UIAlertController object; dress it up with title, message, and preferred style;
+         and store its object reference into local constant alertController
+         */
+        let alertController = UIAlertController(title: header, message: body, preferredStyle: UIAlertControllerStyle.alert)
+        
+        // Create a UIAlertAction object and add it to the alert controller
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        // Present the alert controller
+        present(alertController, animated: true, completion: nil)
+    }
+      
 }

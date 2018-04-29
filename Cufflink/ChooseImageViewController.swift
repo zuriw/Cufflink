@@ -92,7 +92,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     //MARK: - Delegates
-     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
     {
         switch imageButtonTagPassed {
         case 1:
@@ -108,7 +108,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             return
         }
         imageView.contentMode = .scaleAspectFit
-        dismiss(animated:true, completion: nil) 
+        dismiss(animated:true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

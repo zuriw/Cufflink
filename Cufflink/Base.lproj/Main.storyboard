@@ -564,7 +564,7 @@
         <scene sceneID="f3w-u9-Rjp">
             <objects>
                 <viewController id="2Lm-SG-KnM" customClass="AddItemViewController" customModule="Cufflink" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="trF-6D-zKd">
+                    <view key="view" contentMode="scaleToFill" id="trF-6D-zKd" customClass="UIControl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -573,9 +573,12 @@
                                 <color key="backgroundColor" white="1" alpha="0.53697559931506844" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <connections>
+                                    <action selector="keyboardDone:" destination="2Lm-SG-KnM" eventType="editingDidEndOnExit" id="Uqc-ak-aEz"/>
+                                </connections>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0.00" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="UTX-rb-01C">
+                            <textField opaque="NO" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="UTX-rb-01C">
                                 <rect key="frame" x="56" y="150" width="117" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="0.53697559930000005" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -583,7 +586,10 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
+                                <connections>
+                                    <action selector="keyboardDone:" destination="2Lm-SG-KnM" eventType="editingDidEndOnExit" id="Woa-nN-XzA"/>
+                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6E-Nn-4rn">
                                 <rect key="frame" x="16" y="155" width="12.5" height="24"/>
@@ -653,7 +659,7 @@
                                     <constraint firstAttribute="height" constant="116" id="FqI-40-eHN"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RH7-Pw-qFZ">
                                 <rect key="frame" x="239" y="617" width="103" height="30"/>
@@ -665,7 +671,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="doneAddingButtonTapped:" destination="2Lm-SG-KnM" eventType="touchUpInside" id="x2T-QL-cyO"/>
+                                    <action selector="doneAddingButtonTapped:" destination="2Lm-SG-KnM" eventType="touchUpInside" id="Zxr-Qb-h7H"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -699,6 +705,9 @@
                             <constraint firstItem="ZXM-94-lIn" firstAttribute="trailing" secondItem="LOe-kh-Eno" secondAttribute="trailing" constant="51" id="yYK-cf-UaJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ZXM-94-lIn"/>
+                        <connections>
+                            <action selector="backgroundTouch:" destination="2Lm-SG-KnM" eventType="touchUpInside" id="cCu-DS-69S"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Add Item" id="qHW-mz-vzG"/>
                     <connections>
@@ -775,7 +784,7 @@
                     <navigationItem key="navigationItem" title="Item Image" id="60V-bL-rzK">
                         <barButtonItem key="rightBarButtonItem" title="Done" id="4hn-JS-YfU">
                             <connections>
-                                <segue destination="Zgj-oV-zD3" kind="unwind" unwindAction="unwindToAddItemViewControllerWithSegue:" id="VOq-4n-b54"/>
+                                <segue destination="Zgj-oV-zD3" kind="unwind" identifier="ChooseImage-Done" unwindAction="unwindToAddItemViewControllerWithSegue:" id="VOq-4n-b54"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

@@ -15,29 +15,47 @@ const hashPassword = password => {
 
 const secret = "7hi2135SiSa$ee;bloy8l9EiEeeCre7";
 
-const client = MongoClient.connect(
-  "mongodb+srv://cufflink:Z4sfeyl2e8ecXCc5@cufflink-cyonp.mongodb.net/test",
-  (err, client) => {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
+const catchPromise = fn => async (req, res) => {
+  try {
+    await fn(req, res);
+  } catch (error) {
+    res
+      .json({ error })
+      .status(500)
+      .end();
+  }
+};
 
-    const db = client.db("cufflink");
-    const bucket = new GridFSBucket(db);
+var db;
+var bucket;
+var client;
 
-    const catchPromise = fn => async (req, res) => {
-      try {
-        await fn(req, res);
-      } catch (error) {
-        res
-          .json({ error })
-          .status(500)
-          .end();
+
+
+
+client = MongoClient.connect(
+    "mongodb+srv://cufflink:Z4sfeyl2e8ecXCc5@cufflink-cyonp.mongodb.net/test",
+    (err, client) => {
+      if (err) {
+        console.error(err);
+        process.exit(1);
       }
-    };
 
-    app.post("/signup", (req, res) => {
+      db = client.db("cufflink");
+      bucket = new GridFSBucket(db);
+
+      db.collection("users").createIndex({ email: 1 }, { unique: true }, err => {
+        if (err) {
+          console.error(err);
+          process.exit(1);
+          }
+        });
+})
+
+
+
+
+app.post("/signup", (req, res) => {
       if (
         req.body.email == null ||
         req.body.password == null ||
@@ -87,7 +105,7 @@ const client = MongoClient.connect(
       }
     });
 
-    app.post("/login", (req, res) => {
+app.post("/login", (req, res) => {
       if (
         req.body.email == null ||
         req.body.password == null ||
@@ -271,15 +289,6 @@ const client = MongoClient.connect(
       })
     );
 
-    db.collection("users").createIndex({ email: 1 }, { unique: true }, err => {
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      } else {
-        app.listen(8080, "0.0.0.0", () => {
-          console.log("Listening on port 8080");
-        });
-      }
+    app.listen(8080, "0.0.0.0", () => {
+      console.log("Listening on port 8080");
     });
-  }
-);
