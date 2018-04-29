@@ -46,5 +46,9 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Cufflink requires your location only when you&apos;re using the app</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Cufflink requires the use of your camera to take pictrue</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Cufflink requires the use of your photo library to access pictures</string>
 </dict>
 </plist>

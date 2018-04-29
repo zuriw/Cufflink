@@ -14,6 +14,7 @@ struct Item {
     let price: Double
     let unitForPrice: String
     let thumbnail: UIImage
+    let available: Bool
 
     init(_ itemDictionary: NSDictionary) {
         let thumbnail = itemDictionary.value(forKey: "thumbnail")! as! String
@@ -25,6 +26,7 @@ struct Item {
         self.price = (itemDictionary.value(forKey: "price")! as! NSNumber).doubleValue
         self.unitForPrice = itemDictionary.value(forKey: "unitForPrice")! as! String
         self.thumbnail = UIImage(data: thumbnailData!)!
+        self.available = (itemDictionary.value(forKey: "available") as! Bool?) ?? true
     }
 }
 
@@ -36,6 +38,7 @@ struct ItemDetails {
     let pictures: [UIImage]
     let details: String
     let owner: User
+    let available: Bool
 
     init(_ itemDictionary: NSDictionary) {
         let imageArray = itemDictionary.value(forKey: "pictures")! as! [String]
@@ -51,6 +54,7 @@ struct ItemDetails {
         }
         self.details = (itemDictionary.value(forKey: "details") as! String?) ?? "No details provided."
         self.owner = User(itemDictionary.value(forKey: "owner")! as! NSDictionary)
+        self.available = (itemDictionary.value(forKey: "available") as! Bool?) ?? true
     }
 }
 
@@ -62,15 +66,17 @@ struct User {
     let profile: String
     let phone: String
     let location: String
+    let items: [Item]
 
     init(_ itemDictionary: NSDictionary) {
-        self.id = itemDictionary.value(forKey: "_id")! as! String
+        self.id = (itemDictionary.value(forKey: "_id") as! String?) ?? ""
         self.firstName = (itemDictionary.value(forKey: "firstName") as! String?) ?? ""
         self.lastName = (itemDictionary.value(forKey: "lastName") as! String?) ?? ""
         self.email = (itemDictionary.value(forKey: "email") as! String?) ?? ""
         self.profile = (itemDictionary.value(forKey: "profile") as! String?) ?? ""
         self.phone = (itemDictionary.value(forKey: "phone") as! String?) ?? ""
         self.location = (itemDictionary.value(forKey: "location") as! String?) ?? ""
+        self.items = (itemDictionary.value(forKey: "items") as! [Item]?) ?? []
     }
 
     func name() -> String {
@@ -83,13 +89,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var token: String!
-   // var currentUser = User(NSDictionary())
+    var currentUser = User(NSDictionary())
 
     func login(email: String, password: String, completionHandler: @escaping (Bool) -> Void) {
         let url = URL(string: "https://cufflink-api.now.sh/login")
-//        self.requestUrl("/me", nil) { (body, response) in
-//            self.currentUser = User(body as! NSDictionary)
-//        }
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         // Setting the content-type as JSON
@@ -115,7 +118,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 do {
                     let values = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: String]
                     self.token = values["token"]
-                    
+                    self.requestUrl("/me", nil) { (body, response) in
+                        self.currentUser = User(body as! NSDictionary)
+                    }
                     DispatchQueue.main.async {
                         completionHandler(true)
                     }

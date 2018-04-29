@@ -28,6 +28,12 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Set up the Add button on the right of the navigation bar to call the addCity method when tapped
+        let addButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(HomeTableViewController.addItem(_:)))
+        self.navigationItem.rightBarButtonItem = addButton
+        
+        
         /*
          The user can turn off location services on an iOS device in Settings.
          First, you must check to see of it is turned off or not.
@@ -121,7 +127,15 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
     override func viewWillAppear(_ animated: Bool) {
         self.appDelegate.requestUrl("/items", nil) { (body, response) in
             let array = body as! [NSDictionary]
-            self.items = array.map { Item($0) }
+            let allItems = array.map { Item($0) }
+            
+            //only shows available items
+            //NEEDS TO SORT BY DISTANCE FROM CURRENT USER!!!!
+            for item in allItems {
+                if item.available == true{
+                    self.items.append(item)
+                }
+            }
             self.tableView.reloadData()
         }
     }
@@ -186,56 +200,19 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
         performSegue(withIdentifier: "Show Item Details", sender: self)
     }
     
+    /*
+     ---------------------------
+     MARK: - Add New Item
+     ---------------------------
+     */
     
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
+    // The addMovie method is invoked when the user taps the Add button created in viewDidLoad() above.
+    @objc func addItem(_ sender: AnyObject) {
+        
+        // Perform the segue
         performSegue(withIdentifier: "Add Item", sender: self)
     }
-    
+   
     /*
      -------------------------
      MARK: - Prepare For Segue
@@ -254,6 +231,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
             
             //Pass current User location to the downstream view controller object
             itemDetailsViewController.userLocationPassed = userLocation
+            
         }
     }
     

@@ -20,13 +20,14 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
     @IBOutlet var distanceLabel: UILabel!
     @IBOutlet var messageButton: UIButton!
     @IBOutlet var itemImageView: UIImageView!
-
+    
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
     var itemId: String!
     var item: ItemDetails!
     var timer: Timer!
     var updateCounter: Int!
     var userLocationPassed = CLLocation()
+    var isUserItem = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +78,12 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
                 self.distanceLabel.text = String(format: "%.1f", self.userLocationPassed.distance(from: ownerLocation) / 1609.34) + " Miles away"
                 
             }
-
+            //if this item belongs to current user
+            if self.item.owner.id == self.appDelegate.currentUser.id{
+                self.isUserItem = true
+                self.messageButton.removeFromSuperview() //TEST....works!
+                self.distanceLabel.text = ""
+            }
         }
     }
 
@@ -98,6 +104,12 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
     }
     
     @IBAction func ownerImageButtonTapped(_ sender: UIButton) {
+        //Check if owner is current user
+        if item.owner.id == appDelegate.currentUser.id{
+            performSegue(withIdentifier: "Show Personal Profile", sender: self)
+            return
+        }
+        
         performSegue(withIdentifier: "Show Owner Profile", sender: self)
     }
 
@@ -147,6 +159,8 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
             // Pass the data object to the downstream view controller object
             userProfileViewController.ownerPassed = item.owner
             userProfileViewController.navigationItem.title = item.owner.name()
+            
+        }else if segue.identifier == "Show Personal Profile"{
             
         }
     }
