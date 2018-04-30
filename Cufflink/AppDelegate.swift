@@ -185,7 +185,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         task.resume()
     }
     
-    func upload(image: UIImage, completionHandler: @escaping (Data) -> Void) {
+    func upload(image: UIImage, completionHandler: @escaping (String) -> Void) {
         let url = URL(string: "http://\(hostIP)/upload")
         
         var request = URLRequest(url: url!)
@@ -198,23 +198,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if self.token != nil {
             request.addValue(self.token, forHTTPHeaderField: "token")
         }
-        
-//        let postString = [
-//            "files": files
-//            ] as [String: String]
-        
-        do {
-            request.httpBody = UIImageJPEGRepresentation(image, 0.8)!
-        } catch let error {
-            print(error.localizedDescription)
-            return
-        }
+
+        request.httpBody = UIImageJPEGRepresentation(image, 0.8)!
         
         let task = URLSession.shared.dataTask(with: request) { (data, response: URLResponse?, error: Error?) in
             let httpResponse = response! as! HTTPURLResponse
             if (httpResponse.statusCode == 200) { //SUCCESS! good to go!
-                DispatchQueue.main.async {
-                    completionHandler(data)
+                do {
+                    let values = try JSONSerialization.jsonObject(with: data!, options: [])
+                    DispatchQueue.main.async {
+                        let object = values as! [String: String]
+                        completionHandler(object["url"]!)
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
                 }
             } else {
                 print(httpResponse)

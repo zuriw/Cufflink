@@ -102,7 +102,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         case 1:
             chosenImage1 = info[UIImagePickerControllerOriginalImage] as! UIImage
             
-            self.appDelegate.upload(image: chosenImage1){(returnURL) in
+            self.appDelegate.upload(image: chosenImage1) {(returnURL) in
                 
                 print("RETURNED URL: \(returnURL)")
             }
