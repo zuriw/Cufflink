@@ -233,7 +233,7 @@ app.post("/upload", authenticate, (req, res) => {
   }
 });
 
-app.get("/photos/:name", authenticate, (req, res) => {
+app.get("/photos/:name", (req, res) => {
   res.header("Content-Type", "image/jpeg");
   bucket.openDownloadStreamByName(req.params.name).pipe(res);
 });
