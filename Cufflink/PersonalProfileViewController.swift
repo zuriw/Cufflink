@@ -53,11 +53,11 @@ class PersonalProfileViewController: UIViewController {
         
         if currentUser.profile != ""{
             let profileStr = currentUser.profile
-            let url = URL(string: profileStr)!
+            //let url = URL(string: profileStr)!
             //let profileData = try? Data(contentsOf: url)
-            appDelegate.requestUrl("/photos/\(url)", nil){(body, response) in
-                print("body: \(body)")
-                print("repsonse: \(response)")
+            appDelegate.requestUrl2(profileStr, nil){(body, response) in
+                self.currentUserImageView.setImage(body as? UIImage, for: .normal)
+                print(body)
                 
             }
             //currentUserImageView.setImage(UIImage(data: profileData!)!, for: .normal)
@@ -71,8 +71,6 @@ class PersonalProfileViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
     /*
     // MARK: - Navigation
 
@@ -82,5 +80,15 @@ class PersonalProfileViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    @IBAction func logOutButtonTapped(_ sender: UIButton) {
+        
+        let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LogInViewController") as! LogInViewController
+        
+        let appDel:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        appDel.window?.rootViewController = loginVC
+    
+    
+    }
+    
 }
