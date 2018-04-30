@@ -185,7 +185,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         task.resume()
     }
     
-    func upload(image: UIImage, completionHandler: @escaping (Bool) -> Void) {
+    func upload(image: UIImage, completionHandler: @escaping (Data) -> Void) {
         let url = URL(string: "http://\(hostIP)/upload")
         
         var request = URLRequest(url: url!)
@@ -204,7 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            ] as [String: String]
         
         do {
-            request.httpBody = UIImagePNGRepresentation(image)
+            request.httpBody = UIImageJPEGRepresentation(image, 0.8)!
         } catch let error {
             print(error.localizedDescription)
             return
@@ -214,11 +214,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let httpResponse = response! as! HTTPURLResponse
             if (httpResponse.statusCode == 200) { //SUCCESS! good to go!
                 DispatchQueue.main.async {
-                    completionHandler(true)
-                }
-            } else if httpResponse.statusCode == 400 { //Missing information or already signed up
-                DispatchQueue.main.async {
-                    completionHandler(false)
+                    completionHandler(data)
                 }
             } else {
                 print(httpResponse)
