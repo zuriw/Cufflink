@@ -33,7 +33,7 @@ struct Item {
 struct ItemDetails {
     let id: String
     let title: String
-    let price: Double
+    let price: String
     let unitForPrice: String
     let pictures: [UIImage]
     let details: String
@@ -45,7 +45,7 @@ struct ItemDetails {
 
         self.id = itemDictionary.value(forKey: "_id")! as! String
         self.title = itemDictionary.value(forKey: "title")! as! String
-        self.price = (itemDictionary.value(forKey: "price")! as! NSNumber).doubleValue
+        self.price = itemDictionary.value(forKey: "price")! as! String
         self.unitForPrice = itemDictionary.value(forKey: "unitForPrice")! as! String
         self.pictures = imageArray.map {
             let url = URL(string: $0)!
