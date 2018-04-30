@@ -184,6 +184,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         task.resume()
     }
+
+    func upload(images: [UIImage], completionHandler: @escaping ([String]) -> Void) {
+        var uploadStatus = images.map { (image) in return false }
+        var results: [String] = []
+
+        for (i, image) in images.enumerated() {
+            self.upload(image: image) { (url) in
+                results[i] = "http://\(self.hostIP)\(url)"
+                uploadStatus[i] = true
+
+                if (uploadStatus.filter({ $0 == false }).count == 0) {
+                    completionHandler(results)
+                }
+            }
+        }
+    }
     
     func upload(image: UIImage, completionHandler: @escaping (String) -> Void) {
         let url = URL(string: "http://\(hostIP)/upload")
@@ -241,42 +257,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 request.httpBody = try JSONSerialization.data(withJSONObject: body!, options: [])
             }
 
-            let task = URLSession.shared.dataTask(with: request) { (data, response: URLResponse?, error: Error?) in
-                let httpResponse = response! as! HTTPURLResponse
-                DispatchQueue.main.async {
-                    do {
-                        let values = try JSONSerialization.jsonObject(with: data!, options: [])
-                        completionHandler(values, httpResponse)
-                    } catch let error {
-                        print(error.localizedDescription)
-                    }
-                }
-            }
-            task.resume()
-        } catch let error {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func requestUrl2(_ path: String, _ body: Any?, completionHandler: @escaping (Any, HTTPURLResponse) -> Void) {
-        let url = URL(string: path)
-        
-        var request = URLRequest(url: url!)
-        request.httpMethod = body == nil ? "GET" : "POST"
-        // Setting the content-type as JSON
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        //Setting the result content-type as JSON
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        
-        if self.token != nil {
-            request.addValue(self.token, forHTTPHeaderField: "token")
-        }
-        
-        do {
-            if body != nil {
-                request.httpBody = try JSONSerialization.data(withJSONObject: body!, options: [])
-            }
-            
             let task = URLSession.shared.dataTask(with: request) { (data, response: URLResponse?, error: Error?) in
                 let httpResponse = response! as! HTTPURLResponse
                 DispatchQueue.main.async {
