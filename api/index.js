@@ -20,7 +20,7 @@ const catchPromise = fn => async (req, res) => {
     await fn(req, res);
   } catch (error) {
     res
-      .json({ error })
+      .json({ error: error.toString() })
       .status(500)
       .end();
   }
@@ -190,13 +190,21 @@ app.get(
 
     res
       .json(
-        items.map(item => ({
-          _id: item._id,
-          title: item.title,
-          price: item.price,
-          unitForPrice: item.unitForPrice,
-          thumbnail: item.pictures[0]
-        }))
+        await Promise.all(
+          items.map(async item => {
+            const owner = await db
+              .collection("users")
+              .find({ _id: new ObjectID(item.owner) });
+            return {
+              _id: item._id,
+              title: item.title,
+              price: item.price,
+              unitForPrice: item.unitForPrice,
+              thumbnail: item.pictures[0],
+              ownerLocation: owner.location
+            };
+          })
+        )
       )
       .end();
   })
@@ -272,6 +280,18 @@ app.post(
 );
 
 app.get(
+  "/me/items",
+  authenticate,
+  catchPromise(async (req, res) => {
+    const cursor = await db
+      .collection("items")
+      .find({ owner: new ObjectID(req.user._id) });
+
+    res.json(await cursor.toArray()).end();
+  })
+);
+
+app.get(
   "/users/:id",
   authenticate,
   catchPromise(async (req, res) => {
@@ -281,6 +301,18 @@ app.get(
     delete user.hashedPassword;
 
     res.json(user).end();
+  })
+);
+
+app.get(
+  "/users/:id/items",
+  authenticate,
+  catchPromise(async (req, res) => {
+    const cursor = await db
+      .collection("items")
+      .find({ owner: new ObjectID(req.params.id) });
+
+    res.json(await cursor.toArray()).end();
   })
 );
 
