@@ -124,7 +124,7 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
         
         // Configure the fields of the interface.
         composeVC.recipients = [self.item.owner.phone]
-        composeVC.body = "Hello! My name is Jeff. I am interested in  " + self.item.title +
+        composeVC.body = "Hello! My name is \(self.item.owner.name()). I am interested in  " + self.item.title +
             "on Cufflink. Can we talk?"
         
         // Present the view controller modally.

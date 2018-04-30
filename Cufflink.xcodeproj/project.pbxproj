@@ -22,10 +22,8 @@
 		D54841BE208A33080003F7AE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D54841BD208A33080003F7AE /* CoreLocation.framework */; };
 		D5D2ED1B209422EB00E04827 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D2ED1A209422EB00E04827 /* WelcomeViewController.swift */; };
 		D5D2ED1D20942DBA00E04827 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D2ED1C20942DB900E04827 /* MessageUI.framework */; };
-		D5D2ED1E209436C300E04827 /* NVActivityIndicatorView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D2ED1F209436C300E04827 /* NVActivityIndicatorView.framework */; };
 		D5FDCF4820955FEB00C41100 /* ChooseImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FDCF4720955FEB00C41100 /* ChooseImageViewController.swift */; };
 		D5FDCF4A209645A900C41100 /* PersonalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FDCF49209645A900C41100 /* PersonalProfileViewController.swift */; };
-		F94DE3EDD08477051AD109EF /* Pods_Cufflink.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6103BDB51FB66E832DD1B280 /* Pods_Cufflink.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,10 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5D2ED1E209436C300E04827 /* NVActivityIndicatorView.framework in Frameworks */,
 				D5D2ED1D20942DBA00E04827 /* MessageUI.framework in Frameworks */,
 				D54841BE208A33080003F7AE /* CoreLocation.framework in Frameworks */,
-				F94DE3EDD08477051AD109EF /* Pods_Cufflink.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

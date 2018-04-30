@@ -26,6 +26,8 @@ class PersonalProfileViewController: UIViewController {
 
         let currentUser = appDelegate.currentUser
         currentUserNameLabel.text! = currentUser.name()
+        
+        //Making profile image view circular
         currentUserImageView.layer.borderWidth = 1
         currentUserImageView.layer.masksToBounds = false
         currentUserImageView.layer.borderColor = UIColor.white.cgColor
@@ -38,31 +40,28 @@ class PersonalProfileViewController: UIViewController {
             // Place details
             var placeMark: CLPlacemark!
             placeMark = placemarks?[0]
+            var location = ""
             
-            // Address dictionary
-            print(placeMark.addressDictionary as Any)
+            // show location of the user
+            let city = placeMark.addressDictionary!["City"] as! String
+            let state = placeMark.addressDictionary!["State"] as! String
+            location = city + ", " + state
+            self.currentUserLocationLabel.text = location
             
-            // Location name
-            if let locationName = placeMark.addressDictionary!["Name"] as? NSString {
-                print(locationName)
-            }
-            // Street address
-            if let street = placeMark.addressDictionary!["Thoroughfare"] as? NSString {
-                print(street)
-            }
-            // City
-            if let city = placeMark.addressDictionary!["City"] as? NSString {
-                print(city)
-            }
-            // Zip code
-            if let zip = placeMark.addressDictionary!["ZIP"] as? NSString {
-                print(zip)
-            }
-            // Country
-            if let country = placeMark.addressDictionary!["Country"] as? NSString {
-                print(country)
-            }
+            
         })
+        
+        if currentUser.profile != ""{
+            let profileStr = currentUser.profile
+            let url = URL(string: profileStr)!
+            //let profileData = try? Data(contentsOf: url)
+            appDelegate.requestUrl("/photos/\(url)", nil){(body, response) in
+                print("body: \(body)")
+                print("repsonse: \(response)")
+                
+            }
+            //currentUserImageView.setImage(UIImage(data: profileData!)!, for: .normal)
+        }
         
         
         // Do any additional setup after loading the view.

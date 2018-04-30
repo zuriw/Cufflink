@@ -69,6 +69,7 @@ struct User {
     let items: [Item]
 
     init(_ itemDictionary: NSDictionary) {
+        
         self.id = (itemDictionary.value(forKey: "_id") as! String?) ?? ""
         self.firstName = (itemDictionary.value(forKey: "firstName") as! String?) ?? ""
         self.lastName = (itemDictionary.value(forKey: "lastName") as! String?) ?? ""
