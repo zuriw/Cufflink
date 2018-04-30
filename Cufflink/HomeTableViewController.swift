@@ -78,6 +78,10 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
         
     }
     
+    @IBAction func profileButtonTapped(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "Show Personal Profile", sender: self)
+    }
+    
     
     /*
      ------------------------------------------
@@ -125,6 +129,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        items.removeAll()
         self.appDelegate.requestUrl("/items", nil) { (body, response) in
             let array = body as! [NSDictionary]
             let allItems = array.map { Item($0) }
@@ -231,6 +236,13 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
             
             //Pass current User location to the downstream view controller object
             itemDetailsViewController.userLocationPassed = userLocation
+            
+        }else if segue.identifier == "Show Personal Profile"{
+            // Obtain the object reference of the destination view controller
+            let personalProfileViewController: PersonalProfileViewController = segue.destination as! PersonalProfileViewController
+            
+            //Pass current User location to the downstream view controller object
+            personalProfileViewController.currentUserLocationPassed = userLocation
             
         }
     }

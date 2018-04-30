@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AppDelegate.swift"
-            timestampString = "546713767.053677"
+            timestampString = "546804488.368448"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "90"
@@ -73,11 +73,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AppDelegate.swift"
-            timestampString = "546713767.0538189"
+            timestampString = "546804488.376421"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "login(email:password:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -89,11 +89,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/HomeTableViewController.swift"
-            timestampString = "546713767.055441"
+            timestampString = "546804488.376772"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
             landmarkName = "HomeTableViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -105,7 +105,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AddItemViewController.swift"
-            timestampString = "546713767.0556901"
+            timestampString = "546804488.37685"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "14"
@@ -153,7 +153,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AddItemViewController.swift"
-            timestampString = "546713767.056031"
+            timestampString = "546804488.376911"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "27"
@@ -169,11 +169,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AppDelegate.swift"
-            timestampString = "546713767.056361"
+            timestampString = "546804488.376967"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
             landmarkName = "AppDelegate"
             landmarkType = "3">
          </BreakpointContent>
@@ -185,11 +185,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/ChooseImageViewController.swift"
-            timestampString = "546713767.0564179"
+            timestampString = "546804488.377306"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -201,11 +201,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/ChooseImageViewController.swift"
-            timestampString = "546713767.056716"
+            timestampString = "546804488.377368"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "imagePickerControllerDidCancel(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -217,11 +217,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/ChooseImageViewController.swift"
-            timestampString = "546713767.056971"
+            timestampString = "546804488.377425"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
             landmarkName = "ChooseImageViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -233,7 +233,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AddItemViewController.swift"
-            timestampString = "546713767.0572259"
+            timestampString = "546804488.37748"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "91"
@@ -249,7 +249,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AddItemViewController.swift"
-            timestampString = "546713767.057454"
+            timestampString = "546804488.377533"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "53"
@@ -265,7 +265,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AddItemViewController.swift"
-            timestampString = "546713767.05765"
+            timestampString = "546804488.377584"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
@@ -281,7 +281,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AddItemViewController.swift"
-            timestampString = "546713767.0578409"
+            timestampString = "546804488.377638"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "52"
@@ -297,13 +297,157 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cufflink/AddItemViewController.swift"
-            timestampString = "546713767.058048"
+            timestampString = "546804488.377691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "99"
             endingLineNumber = "99"
-            landmarkName = "AddItemViewController"
-            landmarkType = "3">
+            landmarkName = "doneAddingButtonTapped(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cufflink/AppDelegate.swift"
+            timestampString = "546804488.379331"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "requestUrl(_:_:completionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cufflink/AppDelegate.swift"
+            timestampString = "546804488.379606"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
+            landmarkName = "requestUrl(_:_:completionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cufflink/PersonalProfileViewController.swift"
+            timestampString = "546804488.379853"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cufflink.PersonalProfileViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Cufflink"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zuriwong/Documents/iOS/Cufflink/Cufflink/PersonalProfileViewController.swift"
+                  timestampString = "546790265.817772"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "36"
+                  endingLineNumber = "36"
+                  offsetFromSymbolStart = "3309">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;__ObjC.CLPlacemark&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Cufflink.PersonalProfileViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Cufflink"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zuriwong/Documents/iOS/Cufflink/Cufflink/PersonalProfileViewController.swift"
+                  timestampString = "546790265.820642"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "40"
+                  endingLineNumber = "40"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cufflink/PersonalProfileViewController.swift"
+            timestampString = "546804488.379907"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cufflink/HomeTableViewController.swift"
+            timestampString = "546804488.379954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
+            landmarkName = "viewWillAppear(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cufflink/ChooseImageViewController.swift"
+            timestampString = "546804488.3800009"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cufflink/AppDelegate.swift"
+            timestampString = "546804488.3800451"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
+            landmarkName = "upload(image:completionHandler:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

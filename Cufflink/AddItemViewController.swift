@@ -108,23 +108,32 @@ class AddItemViewController: UIViewController {
             return
         }
         
-        var unitForPrice = priceUnitSegmentControl.selectedSegmentIndex == 0 ? "perHour" : "perDay"
+        let unitForPrice = priceUnitSegmentControl.selectedSegmentIndex == 0 ? "perHour" : "perDay"
         
+       
         
         let postString = [
             "title": itemTitleTextField.text!,
             "price": itemPriceTextField.text!,
             "unitForPrice": unitForPrice,
-            "description": itemDescriptionTextView.text
+            "description": itemDescriptionTextView.text,
+            
         ] as [String: String]
         
         
-        self.appDelegate.requestUrl("/items", nil) { (body, response) in
-            let array = body as! [NSDictionary]
-            let allItems = array.map { Item($0) }
-        
+        self.appDelegate.requestUrl("/items", postString) { (body, response) in
+            if response.statusCode != 200 {
+                self.showAlertMessage(messageHeader: "Error", messageBody: "Something went wrong...")
+                return
+            }
         }
     }
+    
+
+        
+        
+        
+    
     
     /*
      ------------------------

@@ -211,6 +211,11 @@ app.post("/login", (req, res) => {
       "/items",
       authenticate,
       catchPromise(async (req, res) => {
+        if (!req.body.thumbnail){
+          return res.status(206).json({success: false})
+        }
+
+
         await db.collection("items").insertOne({
           ...req.body,
           owner: req.user._id

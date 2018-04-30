@@ -11,6 +11,10 @@ import AVFoundation
 
 class ChooseImageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    // Obtain the object reference to the App Delegate object
+    var appDelegate = UIApplication.shared.delegate as! AppDelegate
+
+    
     var chosenImage1 = UIImage()
     var chosenImage2 = UIImage()
     var chosenImage3 = UIImage()
@@ -97,6 +101,11 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         switch imageButtonTagPassed {
         case 1:
             chosenImage1 = info[UIImagePickerControllerOriginalImage] as! UIImage
+            
+            self.appDelegate.upload(image: chosenImage1){(returnURL) in
+                print("RETURNED URL: \(returnURL)")
+            }
+            
             imageView.image = chosenImage1
         case 2:
             chosenImage2 = info[UIImagePickerControllerOriginalImage] as! UIImage
@@ -115,16 +124,9 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         dismiss(animated: true, completion: nil)
     }
     
-//    func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: NSDictionary!){
-//        self.dismiss(animated: true, completion: { () -> Void in
-//            self.chosenImage = image
-//        })
-//        imageView.contentMode = .scaleAspectFit //3
-//        imageView.image = chosenImage //4
-//        imageView.image = image
-//    }
-    
-   
+
+ 
+        
     
     
     /*

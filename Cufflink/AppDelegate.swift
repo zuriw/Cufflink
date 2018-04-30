@@ -90,9 +90,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var token: String!
     var currentUser = User(NSDictionary())
+    var hostIP = "104.131.94.93:3000"
 
     func login(email: String, password: String, completionHandler: @escaping (Bool) -> Void) {
-        let url = URL(string: "https://cufflink-api.now.sh/login")
+        let url = URL(string: "http://\(hostIP)/login")
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         // Setting the content-type as JSON
@@ -140,7 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func signUp(firstName: String, lastName: String, phone: String, email: String, location: String, password: String, completionHandler: @escaping (Bool) -> Void) {
-        let url = URL(string: "https://cufflink-api.now.sh/signup")
+        let url = URL(string: "http://\(hostIP)/signup")
         
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
@@ -182,9 +183,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         task.resume()
     }
+    
+    func upload(image: UIImage, completionHandler: @escaping (Bool) -> Void) {
+        let url = URL(string: "http://\(hostIP)/upload")
+        
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        // Setting the content-type as JSON
+        request.addValue("image/jpeg", forHTTPHeaderField: "Content-Type")
+        //Setting the result content-type as JSON
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        if self.token != nil {
+            request.addValue(self.token, forHTTPHeaderField: "token")
+        }
+        
+//        let postString = [
+//            "files": files
+//            ] as [String: String]
+        
+        do {
+            request.httpBody = UIImagePNGRepresentation(image)
+        } catch let error {
+            print(error.localizedDescription)
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response: URLResponse?, error: Error?) in
+            let httpResponse = response! as! HTTPURLResponse
+            if (httpResponse.statusCode == 200) { //SUCCESS! good to go!
+                DispatchQueue.main.async {
+                    completionHandler(true)
+                }
+            } else if httpResponse.statusCode == 400 { //Missing information or already signed up
+                DispatchQueue.main.async {
+                    completionHandler(false)
+                }
+            } else {
+                print(httpResponse)
+                print(String(data: data!, encoding: .utf8)!)
+            }
+        }
+        task.resume()
+    }
+    
 
     func requestUrl(_ path: String, _ body: Any?, completionHandler: @escaping (Any, HTTPURLResponse) -> Void) {
-        let url = URL(string: "https://cufflink-api.now.sh\(path)")
+        let url = URL(string: "http://\(hostIP)\(path)")
 
         var request = URLRequest(url: url!)
         request.httpMethod = body == nil ? "GET" : "POST"
