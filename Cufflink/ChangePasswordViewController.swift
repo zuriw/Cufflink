@@ -13,7 +13,6 @@ class ChangePasswordViewController: UIViewController {
     // Obtain the object reference to the App Delegate object
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
     
-    @IBOutlet var oldPasswordTextField: UITextField!
     @IBOutlet var newPssswordTextField: UITextField!
     @IBOutlet var confirmNewPasswordTextField: UITextField!
     
@@ -55,17 +54,11 @@ class ChangePasswordViewController: UIViewController {
         //Add verification to this...
         var noError = true
         
-        if oldPasswordTextField.text == "" || newPssswordTextField.text == "" || confirmNewPasswordTextField.text == ""{
+        if newPssswordTextField.text == "" || confirmNewPasswordTextField.text == ""{
             showAlertMessage(messageHeader: "Missing Required Fields!", messageBody: "Please enter all required fields for this item")
             return false
         }
-        appDelegate.login(email: appDelegate.currentUser.email, password: oldPasswordTextField.text!) { (success) in
-            if !success {
-                self.showAlertMessage(messageHeader: "Invalid Old Password", messageBody: "Please enter the correct old password!")
-                noError = false
-            }
-        }
-        
+
         if newPssswordTextField.text! != confirmNewPasswordTextField.text!{
             showAlertMessage(messageHeader: "Invalid New Password", messageBody: "New Password does not match!")
             return false

@@ -25,42 +25,48 @@ class PersonalProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let currentUser = appDelegate.currentUser
-        currentUserNameLabel.text! = currentUser.name()
+        appDelegate.requestUrl("/me", nil){ (body, response) in
+            var currentUser = User(body as! NSDictionary)
+            self.currentUserNameLabel.text! = currentUser.name()
+            
+            //Making profile image view circular
+            self.currentUserImageView.layer.borderWidth = 1
+            self.currentUserImageView.layer.masksToBounds = false
+            self.currentUserImageView.layer.borderColor = UIColor.white.cgColor
+            self.currentUserImageView.layer.cornerRadius = self.currentUserImageView.frame.height/2
+            self.currentUserImageView.clipsToBounds = true
+            
+            let geoCoder = CLGeocoder()
+            geoCoder.reverseGeocodeLocation(self.currentUserLocationPassed, completionHandler: { (placemarks, error) -> Void in
+                
+                // Place details
+                var placeMark: CLPlacemark!
+                placeMark = placemarks?[0]
+                var location = ""
+                
+                // show location of the user
+                let city = placeMark.addressDictionary!["City"] as! String
+                let state = placeMark.addressDictionary!["State"] as! String
+                location = city + ", " + state
+                self.currentUserLocationLabel.text = location
+                
+                
+                
+                
+                if currentUser.profile != ""{
+                    let profileStr = currentUser.profile
+                    let url = URL(string: profileStr)!
+                    let profileData = try? Data(contentsOf: url)
+                    self.currentUserImageView.image = UIImage(data: profileData!)
+                }
+                
+                
+            })
+        }
         
-        //Making profile image view circular
-        currentUserImageView.layer.borderWidth = 1
-        currentUserImageView.layer.masksToBounds = false
-        currentUserImageView.layer.borderColor = UIColor.white.cgColor
-        currentUserImageView.layer.cornerRadius = currentUserImageView.frame.height/2
-        currentUserImageView.clipsToBounds = true
         
-        let geoCoder = CLGeocoder()
-        geoCoder.reverseGeocodeLocation(self.currentUserLocationPassed, completionHandler: { (placemarks, error) -> Void in
-            
-            // Place details
-            var placeMark: CLPlacemark!
-            placeMark = placemarks?[0]
-            var location = ""
-            
-            // show location of the user
-            let city = placeMark.addressDictionary!["City"] as! String
-            let state = placeMark.addressDictionary!["State"] as! String
-            location = city + ", " + state
-            self.currentUserLocationLabel.text = location
-            
-            
-            
-            
-            if currentUser.profile != ""{
-                let profileStr = currentUser.profile
-                let url = URL(string: profileStr)!
-                let profileData = try? Data(contentsOf: url)
-                self.currentUserImageView.image = UIImage(data: profileData!)
-            }
-            
-
-        })
+        //let currentUser = appDelegate.currentUser
+        
     }
     
     
@@ -73,8 +79,8 @@ class PersonalProfileViewController: UIViewController {
         if segue.identifier ==  "Settings-Done" {
             // Obtain the object reference of the source view controller
             let settingsViewController: SettingsViewController = segue.source as! SettingsViewController
-            var images = [UIImage()]
             if settingsViewController.profilePicture != nil{
+                var images = [UIImage]()
                 images.append(settingsViewController.profilePicture!)
                 appDelegate.upload(images: images){(urls) in
                     let postString = [
@@ -87,7 +93,7 @@ class PersonalProfileViewController: UIViewController {
                     
                     
                     self.appDelegate.requestUrl("/me", postString){(body, response) in
-                        
+                        self.viewDidLoad()
                     }
                 }
             }else{

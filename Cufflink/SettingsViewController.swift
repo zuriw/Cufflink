@@ -66,7 +66,6 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func profilePictureButtonTapped(_ sender: UIButton) {
-         performSegue(withIdentifier: "Choose Image", sender: self)
     }
     
     /*
@@ -79,7 +78,7 @@ class SettingsViewController: UIViewController {
             // Obtain the object reference of the source view controller
             let chooseImageViewController: ChooseImageViewController = segue.source as! ChooseImageViewController
             
-            profilePictureButton.setImage(chooseImageViewController.chosenImage, for: .normal)
+            profilePictureButton.setBackgroundImage(chooseImageViewController.chosenImage, for: .normal)
             profilePicture = chooseImageViewController.chosenImage
             profilePictureButton.imageView?.contentMode = UIViewContentMode.scaleAspectFill
         }
@@ -89,8 +88,8 @@ class SettingsViewController: UIViewController {
             let postString = [
                 "password": changePasswordViewController.newPssswordTextField.text!
             ]
-            self.appDelegate.requestUrl("/me", postString){(body, response) in
-                
+            self.appDelegate.requestUrl("/changePassword", postString){(body, response) in
+                self.showAlertMessage(messageHeader: "Password Change", messageBody: "Your Password has been changed!")
             }
             
             
