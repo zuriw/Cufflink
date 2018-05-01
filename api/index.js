@@ -295,7 +295,8 @@ app.get(
           title: item.title,
           price: item.price,
           unitForPrice: item.unitForPrice,
-          thumbnail: item.pictures[0]
+          thumbnail: item.pictures[0],
+          available: item.available
         }))
       )
       .end();
@@ -331,7 +332,8 @@ app.get(
           title: item.title,
           price: item.price,
           unitForPrice: item.unitForPrice,
-          thumbnail: item.pictures[0]
+          thumbnail: item.pictures[0],
+          available: item.available
         }))
       )
       .end();
