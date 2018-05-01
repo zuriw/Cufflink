@@ -21,6 +21,8 @@ class AddItemViewController: UIViewController {
     @IBOutlet var doneEditingButton: UIButton!
     @IBOutlet var itemDescriptionTextView: UITextView!
     @IBOutlet var priceUnitSegmentControl: UISegmentedControl!
+    @IBOutlet var deleteImageTwoButton: UIButton!
+    @IBOutlet var deleteImageThreeButton: UIButton!
     
     var chosenImageOnePassed: UIImage?
     var chosenImageTwoPassed: UIImage?
@@ -35,6 +37,21 @@ class AddItemViewController: UIViewController {
         addImageThreeButton.layer.borderWidth = 1
         doneEditingButton.layer.cornerRadius = 20
         doneEditingButton.clipsToBounds = true
+        
+        
+        //Making Delete Image Buttons circular
+        deleteImageTwoButton.layer.borderWidth = 1
+        deleteImageTwoButton.layer.masksToBounds = false
+        deleteImageTwoButton.layer.borderColor = UIColor.white.cgColor
+        deleteImageTwoButton.layer.cornerRadius = deleteImageTwoButton.frame.height/2
+        deleteImageTwoButton.clipsToBounds = true
+        
+        deleteImageThreeButton.layer.borderWidth = 1
+        deleteImageThreeButton.layer.masksToBounds = false
+        deleteImageThreeButton.layer.borderColor = UIColor.white.cgColor
+        deleteImageThreeButton.layer.cornerRadius = deleteImageThreeButton.frame.height/2
+        deleteImageThreeButton.clipsToBounds = true
+        
         // Do any additional setup after loading the view.
     }
 
@@ -80,6 +97,26 @@ class AddItemViewController: UIViewController {
         
         
     }
+    
+    @IBAction func deleteImageButtonTapped(_ sender: UIButton) {
+        if sender.tag == 2{
+            if chosenImageTwoPassed != nil{
+                chosenImageTwoPassed = nil
+                addImageTwoButton.setBackgroundImage(nil, for: .normal)
+                addImageTwoButton.setTitle("Add Image", for: .normal)
+            }
+        }else if sender.tag == 3{
+            if chosenImageThreePassed != nil{
+                chosenImageThreePassed = nil
+                addImageThreeButton.setBackgroundImage(nil, for: .normal)
+                addImageThreeButton.setTitle("Add Image", for: .normal)
+            }
+        }else{
+            return
+        }
+    }
+    
+    
     /*
      -------------------------
      MARK: - Prepare For Segue

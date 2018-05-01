@@ -20,7 +20,7 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController storyboardIdentifier="LogInViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="LogInViewController" customModule="Cufflink" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" customClass="UIControl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -42,6 +42,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="done"/>
+                                <connections>
+                                    <action selector="keyboardDone:" destination="BYZ-38-t0r" eventType="editingDidEndOnExit" id="e1c-OZ-Fmq"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="J74-uW-M3V">
                                 <rect key="frame" x="41" y="269" width="294" height="30"/>
@@ -51,6 +54,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="done" secureTextEntry="YES"/>
+                                <connections>
+                                    <action selector="keyboardDone:" destination="BYZ-38-t0r" eventType="editingDidEndOnExit" id="pP6-X9-J0o"/>
+                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hFk-GI-ZG4">
                                 <rect key="frame" x="0.0" y="355" width="375" height="50"/>
@@ -99,6 +105,9 @@
                             <constraint firstItem="J74-uW-M3V" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="41" id="zz7-Ba-TrB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <connections>
+                            <action selector="backgroundTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sgb-o1-uxX"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="emailTextField" destination="bxt-6b-Ugo" id="8Wj-oC-Whq"/>
@@ -343,6 +352,17 @@
                                     <action selector="keyboardDone:" destination="dSA-rA-vfR" eventType="editingDidEndOnExit" id="5yh-pn-X42"/>
                                 </connections>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XhE-iO-YrO">
+                                <rect key="frame" x="20" y="29" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="O8U-bW-2PB"/>
+                                    <constraint firstAttribute="width" constant="32" id="bQW-LD-R5I"/>
+                                </constraints>
+                                <state key="normal" image="icons8-left_4"/>
+                                <connections>
+                                    <segue destination="y1O-pU-YrL" kind="unwind" unwindAction="unwindToLogInViewControllerWithSegue:" id="xJL-li-4kg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -371,6 +391,7 @@
                             <constraint firstItem="Y2w-4a-Itu" firstAttribute="leading" secondItem="Q4r-t2-DQO" secondAttribute="leading" id="IKT-AW-JTf"/>
                             <constraint firstItem="Q4r-t2-DQO" firstAttribute="trailing" secondItem="zOf-YD-McQ" secondAttribute="trailing" constant="104.5" id="IiJ-B7-EZW"/>
                             <constraint firstItem="Q4r-t2-DQO" firstAttribute="trailing" secondItem="IZh-5b-NyL" secondAttribute="trailing" constant="95" id="Lfc-td-zBT"/>
+                            <constraint firstItem="XhE-iO-YrO" firstAttribute="top" secondItem="Q4r-t2-DQO" secondAttribute="top" constant="9" id="NaY-iU-kZs"/>
                             <constraint firstItem="Jqn-iu-7ue" firstAttribute="leading" secondItem="Q4r-t2-DQO" secondAttribute="leading" constant="32" id="Nhm-TM-KU2"/>
                             <constraint firstItem="jf4-yj-xDC" firstAttribute="leading" secondItem="SG4-5o-xHh" secondAttribute="trailing" constant="29" id="TEb-E3-Wro"/>
                             <constraint firstItem="kw5-Qb-aix" firstAttribute="leading" secondItem="dAW-OL-6G0" secondAttribute="trailing" constant="29" id="U2x-Kz-Nxx"/>
@@ -380,6 +401,7 @@
                             <constraint firstItem="jf4-yj-xDC" firstAttribute="top" secondItem="Vgi-N1-CF4" secondAttribute="bottom" constant="8" id="ZMT-CC-wGx"/>
                             <constraint firstItem="SG4-5o-xHh" firstAttribute="leading" secondItem="Q4r-t2-DQO" secondAttribute="leading" constant="32" id="a0q-Ct-J1q"/>
                             <constraint firstItem="YpR-5l-gMa" firstAttribute="leading" secondItem="Q4r-t2-DQO" secondAttribute="leading" constant="32" id="d9B-vH-NLB"/>
+                            <constraint firstItem="XhE-iO-YrO" firstAttribute="leading" secondItem="Q4r-t2-DQO" secondAttribute="leading" constant="20" id="dYS-5c-ILD"/>
                             <constraint firstItem="dAW-OL-6G0" firstAttribute="leading" secondItem="Q4r-t2-DQO" secondAttribute="leading" constant="32" id="drO-Do-vVH"/>
                             <constraint firstItem="rqt-Sl-cax" firstAttribute="top" secondItem="h9f-ru-y3j" secondAttribute="bottom" constant="8" id="e7l-Qn-efh"/>
                             <constraint firstItem="1pz-39-52g" firstAttribute="top" secondItem="QAV-tY-dyf" secondAttribute="bottom" constant="8" id="fOS-mE-YaI"/>
@@ -421,6 +443,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7N3-K7-Osx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="y1O-pU-YrL" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="880.79999999999995" y="131.78410794602701"/>
         </scene>
@@ -678,6 +701,24 @@
                                     <segue destination="6As-Op-Spe" kind="unwind" identifier="AddItem-Done" unwindAction="unwindToHomeTableViewControllerWithSegue:" id="UTg-MY-fRE"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W4o-ty-oSd">
+                                <rect key="frame" x="303" y="315" width="32" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
+                                <state key="normal" image="icons8-delete_sign"/>
+                                <connections>
+                                    <action selector="deleteImageButtonTapped:" destination="2Lm-SG-KnM" eventType="touchUpInside" id="LxE-lU-G2t"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NN5-QB-mUQ">
+                                <rect key="frame" x="303" y="431" width="32" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
+                                <state key="normal" image="icons8-delete_sign"/>
+                                <connections>
+                                    <action selector="deleteImageButtonTapped:" destination="2Lm-SG-KnM" eventType="touchUpInside" id="c31-wR-P3D"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.86274509799999999" green="0.81568627449999997" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -718,6 +759,8 @@
                         <outlet property="addImageOneButton" destination="QSg-hd-aiM" id="fGO-eh-aHP"/>
                         <outlet property="addImageThreeButton" destination="LOe-kh-Eno" id="Uqm-Kl-AnN"/>
                         <outlet property="addImageTwoButton" destination="X6s-np-XmO" id="dP4-ZD-Vr4"/>
+                        <outlet property="deleteImageThreeButton" destination="NN5-QB-mUQ" id="0yR-aM-tpA"/>
+                        <outlet property="deleteImageTwoButton" destination="W4o-ty-oSd" id="vTI-pC-fA6"/>
                         <outlet property="doneEditingButton" destination="RH7-Pw-qFZ" id="Eq0-5J-CTs"/>
                         <outlet property="itemDescriptionTextView" destination="TXE-Ql-3tj" id="PHO-Ox-b06"/>
                         <outlet property="itemPriceTextField" destination="UTX-rb-01C" id="XC9-Im-Tew"/>
@@ -1535,6 +1578,24 @@
                                 </segments>
                                 <color key="tintColor" red="0.58081901069999997" green="0.088427625600000004" blue="0.31863921880000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </segmentedControl>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MSN-wG-wyU">
+                                <rect key="frame" x="301" y="309" width="32" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
+                                <state key="normal" image="icons8-delete_sign"/>
+                                <connections>
+                                    <action selector="deleteImageButtonTapped:" destination="atn-7f-SNN" eventType="touchUpInside" id="E3e-aC-ZHG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Tx-Ze-9Rg">
+                                <rect key="frame" x="301" y="439" width="32" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" name="systemPinkColor" catalog="System" colorSpace="catalog"/>
+                                <state key="normal" image="icons8-delete_sign"/>
+                                <connections>
+                                    <action selector="deleteImageButtonTapped:" destination="atn-7f-SNN" eventType="touchUpInside" id="AQW-mv-pD5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.86274509799999999" green="0.81568627449999997" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
                         <viewLayoutGuide key="safeArea" id="kB2-OT-HUV"/>
@@ -1554,6 +1615,8 @@
                         <outlet property="addImageThreeButton" destination="PWC-BP-zt3" id="d3U-Uh-6by"/>
                         <outlet property="addImageTwoButton" destination="wVT-Er-zbV" id="jci-gu-Nv6"/>
                         <outlet property="availableSegmentedControl" destination="0Un-XU-b3U" id="PsQ-Eo-flQ"/>
+                        <outlet property="deleteImageThreeButton" destination="2Tx-Ze-9Rg" id="PHP-Mg-IkH"/>
+                        <outlet property="deleteImageTwoButton" destination="MSN-wG-wyU" id="R5w-4S-HxK"/>
                         <outlet property="doneEditingButton" destination="RUV-6k-gVg" id="eIP-Kd-L69"/>
                         <outlet property="itemDescriptionTextView" destination="Phu-Yh-E9F" id="Sti-jf-mro"/>
                         <outlet property="itemPriceTextField" destination="5r3-hI-71s" id="9vd-zU-mx1"/>
@@ -2118,6 +2181,8 @@
         <image name="Setting" width="200" height="200"/>
         <image name="blank-profile-picture-973460_640-300x300" width="300" height="300"/>
         <image name="bow tie" width="512" height="512"/>
+        <image name="icons8-delete_sign" width="32" height="32"/>
+        <image name="icons8-left_4" width="32" height="32"/>
         <image name="icons8-login_as_user" width="25" height="25"/>
         <image name="icons8-marker" width="25" height="25"/>
         <image name="icons8-ok" width="100" height="100"/>
