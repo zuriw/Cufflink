@@ -299,6 +299,21 @@ app.post(
   })
 );
 
+app.post(
+  "/changePassword",
+  authenticate,
+  catchPromise(async (req, res) => {
+    await db
+      .collection("users")
+      .updateOne(
+        { _id: new ObjectID(req.user._id) },
+        { $set: { hashedPassword: hashPassword(req.body.password) } }
+      );
+
+    res.json({ success: true }).end();
+  })
+);
+
 app.get(
   "/me/items",
   authenticate,
