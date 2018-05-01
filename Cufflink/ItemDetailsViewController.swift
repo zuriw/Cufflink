@@ -15,9 +15,9 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
     @IBOutlet var imagesPageControl: UIPageControl!
     @IBOutlet var priceLabel: UILabel!
     @IBOutlet var descriptionTextView: UITextView!
-    @IBOutlet var ownerImageButton: UIButton!
-    @IBOutlet var ownerNameLabel: UILabel!
-    @IBOutlet var distanceLabel: UILabel!
+    @IBOutlet var ownerImageButton: UIButton?
+    @IBOutlet var ownerNameLabel: UILabel?
+    @IBOutlet var distanceLabel: UILabel?
     @IBOutlet var messageButton: UIButton!
     @IBOutlet var itemImageView: UIImageView!
     
@@ -28,6 +28,8 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
     var updateCounter: Int!
     var userLocationPassed = CLLocation()
     var isUserItem = false
+    var distanceToPass: String!
+    var userName: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +38,6 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
     override func viewWillAppear(_ animated: Bool) {
         self.appDelegate.requestUrl("/items/\(itemId!)", nil) { (body, response) in
             self.item = ItemDetails(body as! NSDictionary)
-
             self.imagesPageControl.numberOfPages = self.item.pictures.count
             self.updateCounter = 0
             self.timer = Timer.scheduledTimer(
@@ -52,14 +53,27 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
                 self.priceLabel.text! = "$" + String(describing: self.item.price) + "/ Day"
                 break
             case "perHour":
-                self.priceLabel.text! = "$" + String(describing: self.item.price) + "/ Price"
+                self.priceLabel.text! = "$" + String(describing: self.item.price) + "/ Hour"
                 break
             default:
                 break
             }
             self.updateTimer()
             self.descriptionTextView.text! = self.item.details
-            self.ownerNameLabel.text = self.item.owner.name()
+            if self.ownerNameLabel != nil{
+                 self.ownerNameLabel?.text = self.item.owner.name()
+            }
+           
+            if self.item.owner.profile != ""{
+                let profileStr = self.item.owner.profile
+                let url = URL(string: profileStr)!
+                let profileData = try? Data(contentsOf: url)
+                if self.ownerImageButton != nil{
+                    self.ownerImageButton?.setBackgroundImage(UIImage(data: profileData!), for: .normal)
+                    self.ownerImageButton?.imageView?.contentMode = UIViewContentMode.scaleAspectFill
+                }
+                
+            }
             self.navigationItem.title = self.item.title
             let address = self.item.owner.location
             
@@ -70,19 +84,25 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
                     let ownerLocation = placemarks.first?.location
                     else {
                         // handle no location found
-                        self.distanceLabel.text = "unknown Miles away"
+                        if self.distanceLabel != nil{
+                            self.distanceLabel?.text = "unknown Miles away"
+                        }
+                        self.distanceToPass = "unknown Miles away"
                         return
                 }
                 
                 // Calculate distance between user and owner in miles
-                self.distanceLabel.text = String(format: "%.1f", self.userLocationPassed.distance(from: ownerLocation) / 1609.34) + " Miles away"
+                if self.distanceLabel != nil{
+                    self.distanceLabel?.text = String(format: "%.1f", self.userLocationPassed.distance(from: ownerLocation) / 1609.34) + " Miles away"
+                }
+                
+                self.distanceToPass = String(format: "%.1f", self.userLocationPassed.distance(from: ownerLocation) / 1609.34) + " Miles away"
                 
             }
             //if this item belongs to current user
             if self.item.owner.id == self.appDelegate.currentUser.id{
                 self.isUserItem = true
                 self.messageButton.removeFromSuperview() //TEST....works!
-                self.distanceLabel.text = ""
             }
         }
     }
@@ -124,7 +144,7 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
         
         // Configure the fields of the interface.
         composeVC.recipients = [self.item.owner.phone]
-        composeVC.body = "Hello! My name is \(self.item.owner.name()). I am interested in  " + self.item.title +
+        composeVC.body = "Hello! My name is \(self.appDelegate.currentUser.name()). I am interested in  " + self.item.title +
             "on Cufflink. Can we talk?"
         
         // Present the view controller modally.
@@ -159,8 +179,14 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
             // Pass the data object to the downstream view controller object
             userProfileViewController.ownerPassed = item.owner
             userProfileViewController.navigationItem.title = item.owner.name()
+            userProfileViewController.distancePassed = distanceToPass
             
         }else if segue.identifier == "Show Personal Profile"{
+            // Obtain the object reference of the destination view controller
+            let personalProfileViewController: PersonalProfileViewController = segue.destination as! PersonalProfileViewController
+            
+            // Pass the data object to the downstream view controller object
+            personalProfileViewController.currentUserLocationPassed = userLocationPassed
             
         }
     }

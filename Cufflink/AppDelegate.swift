@@ -14,7 +14,7 @@ struct Item {
     let price: String
     let unitForPrice: String
     let thumbnail: UIImage
-    let available: Bool
+    var available: Bool
 
     init(_ itemDictionary: NSDictionary) {
         let thumbnail = itemDictionary.value(forKey: "thumbnail")! as! String

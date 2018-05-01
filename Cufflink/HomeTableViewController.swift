@@ -137,9 +137,16 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
             //only shows available items
             //NEEDS TO SORT BY DISTANCE FROM CURRENT USER!!!!
             for item in allItems {
-                if item.available == true{
-                    self.items.append(item)
-                }
+                self.items.append(item)
+                
+//                self.appDelegate.requestUrl("/items/\(item.id)", nil){ (body, response) in
+//                    var itemDetails = ItemDetails(body as! NSDictionary)
+//
+//                    if itemDetails.available{
+//                        self.items.append(item)
+//                    }
+//                }
+                
             }
             self.tableView.reloadData()
         }
@@ -171,6 +178,16 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
         
         // Set Item Thumbnail
         cell.itemImageView!.image = item.thumbnail
+        switch item.unitForPrice {
+        case "perDay":
+            cell.itemPriceUnitLabel.text! = "/ Day"
+            break
+        case "perHour":
+            cell.itemPriceUnitLabel.text! = "/ Hour"
+            break
+        default:
+            break
+        }
         
         cell.itemTitleLabel!.text = item.title
         cell.itemPriceLabel!.text = String(item.price)
