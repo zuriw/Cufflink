@@ -11,7 +11,7 @@ import UIKit
 struct Item {
     let id: String
     let title: String
-    let price: Double
+    let price: String
     let unitForPrice: String
     let thumbnail: UIImage
     let available: Bool
@@ -23,7 +23,7 @@ struct Item {
 
         self.id = itemDictionary.value(forKey: "_id")! as! String
         self.title = itemDictionary.value(forKey: "title")! as! String
-        self.price = (itemDictionary.value(forKey: "price")! as! NSNumber).doubleValue
+        self.price = itemDictionary.value(forKey: "price")! as! String
         self.unitForPrice = itemDictionary.value(forKey: "unitForPrice")! as! String
         self.thumbnail = UIImage(data: thumbnailData!)!
         self.available = (itemDictionary.value(forKey: "available") as! Bool?) ?? true
@@ -91,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var token: String!
     var currentUser = User(NSDictionary())
-    var hostIP = "104.131.94.93:3000"
+    var hostIP = "104.236.232.160:8080"
 
     func login(email: String, password: String, completionHandler: @escaping (Bool) -> Void) {
         let url = URL(string: "http://\(hostIP)/login")
@@ -191,7 +191,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         for (i, image) in images.enumerated() {
             self.upload(image: image) { (url) in
-                results[i] = "http://\(self.hostIP)\(url)"
+                results.append("http://\(self.hostIP)\(url)")
                 uploadStatus[i] = true
 
                 if (uploadStatus.filter({ $0 == false }).count == 0) {

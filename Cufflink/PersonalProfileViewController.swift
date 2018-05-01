@@ -52,34 +52,51 @@ class PersonalProfileViewController: UIViewController {
         })
         
         if currentUser.profile != ""{
+            currentUserImageView.setTitle("", for: .normal)
             let profileStr = currentUser.profile
-            //let url = URL(string: profileStr)!
-            //let profileData = try? Data(contentsOf: url)
-            appDelegate.requestUrl2(profileStr, nil){(body, response) in
-                self.currentUserImageView.setImage(body as? UIImage, for: .normal)
-                print(body)
-                
-            }
-            //currentUserImageView.setImage(UIImage(data: profileData!)!, for: .normal)
+            let url = URL(string: profileStr)!
+            let profileData = try? Data(contentsOf: url)
+            currentUserImageView.setImage(UIImage(data: profileData!)!, for: .normal)
+            currentUserImageView.imageView?.contentMode = UIViewContentMode.scaleAspectFill
         }
         
         
         // Do any additional setup after loading the view.
     }
+    
+    
+    /*
+     ---------------------------
+     MARK: - Unwind Segue Method
+     ---------------------------
+     */
+    @IBAction func unwindToPersonalProfileViewController(segue : UIStoryboardSegue) {
+        if segue.identifier !=  "Settings-Done"  {
+            return
+        }
+        
+        // Obtain the object reference of the source view controller
+        let settingsViewController: SettingsViewController = segue.source as! SettingsViewController
+        var postString = [
+            
+        ]
+        appDelegate.requestUrl("/me", <#T##body: Any?##Any?#>, completionHandler: <#T##(Any, HTTPURLResponse) -> Void#>)
+     
 
+    }
+    
+
+    @IBAction func settingButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "Show Settings", sender: self)
+        
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     @IBAction func logOutButtonTapped(_ sender: UIButton) {
         
         let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LogInViewController") as! LogInViewController

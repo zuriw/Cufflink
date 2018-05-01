@@ -14,10 +14,11 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     // Obtain the object reference to the App Delegate object
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
 
-    
+    var chosenImage = UIImage()
     var chosenImage1 = UIImage()
     var chosenImage2 = UIImage()
     var chosenImage3 = UIImage()
+    
     
     @IBOutlet var imageView: UIImageView!
     // User's authorization is required to access the camera
@@ -101,13 +102,8 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         switch imageButtonTagPassed {
         case 1:
             chosenImage1 = info[UIImagePickerControllerOriginalImage] as! UIImage
-            
-            self.appDelegate.upload(image: chosenImage1) {(returnURL) in
-                
-                print("RETURNED URL: \(returnURL)")
-            }
-            
             imageView.image = chosenImage1
+           
         case 2:
             chosenImage2 = info[UIImagePickerControllerOriginalImage] as! UIImage
             imageView.image = chosenImage2
@@ -115,7 +111,8 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
             chosenImage3 = info[UIImagePickerControllerOriginalImage] as! UIImage
             imageView.image = chosenImage3
         default:
-            return
+            chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+            imageView.image = chosenImage
         }
         imageView.contentMode = .scaleAspectFit
         dismiss(animated:true, completion: nil)

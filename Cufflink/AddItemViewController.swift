@@ -22,6 +22,10 @@ class AddItemViewController: UIViewController {
     @IBOutlet var itemDescriptionTextView: UITextView!
     @IBOutlet var priceUnitSegmentControl: UISegmentedControl!
     
+    var chosenImageOnePassed: UIImage?
+    var chosenImageTwoPassed: UIImage?
+    var chosenImageThreePassed: UIImage?
+    
     var imageButtonTagToPass = Int()
     
     override func viewDidLoad() {
@@ -53,21 +57,22 @@ class AddItemViewController: UIViewController {
         if segue.identifier !=  "ChooseImage-Done"  {
             return
         }
-        
-        
+    
         // Obtain the object reference of the source view controller
         let chooseImageViewController: ChooseImageViewController = segue.source as! ChooseImageViewController
-        
         switch imageButtonTagToPass {
         case 1:
             addImageOneButton.setTitle("", for: .normal)
             addImageOneButton.setBackgroundImage(chooseImageViewController.chosenImage1, for: .normal)
+            chosenImageOnePassed = chooseImageViewController.chosenImage1
         case 2:
             addImageTwoButton.setTitle("", for: .normal)
             addImageTwoButton.setBackgroundImage(chooseImageViewController.chosenImage2, for: .normal)
+            chosenImageTwoPassed = chooseImageViewController.chosenImage2
         case 3:
             addImageThreeButton.setTitle("", for: .normal)
             addImageThreeButton.setBackgroundImage(chooseImageViewController.chosenImage3, for: .normal)
+            chosenImageThreePassed = chooseImageViewController.chosenImage3
         default:
             return
         }
@@ -96,37 +101,20 @@ class AddItemViewController: UIViewController {
         }
     }
     
-    @IBAction func doneAddingButtonTapped(_ sender: UIButton) {
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         //Add verification to this...
         if itemTitleTextField.text == "" || itemPriceTextField.text == "" || itemDescriptionTextView.text == ""{
             showAlertMessage(messageHeader: "Missing Required Fields!", messageBody: "Please enter all required fields for this item")
-            return
+            return false
         }
         
         if addImageOneButton.backgroundImage(for: .normal) == nil && addImageTwoButton.backgroundImage(for: .normal) == nil && addImageThreeButton.backgroundImage(for: .normal) == nil{
             showAlertMessage(messageHeader: "Missing Images!", messageBody: "Please add at least one image to your item")
-            return
+            return false
         }
         
-        let unitForPrice = priceUnitSegmentControl.selectedSegmentIndex == 0 ? "perHour" : "perDay"
         
-       
-        
-        let postString = [
-            "title": itemTitleTextField.text!,
-            "price": itemPriceTextField.text!,
-            "unitForPrice": unitForPrice,
-            "description": itemDescriptionTextView.text,
-            
-        ] as [String: String]
-        
-        
-        self.appDelegate.requestUrl("/items", postString) { (body, response) in
-            if response.statusCode != 200 {
-                self.showAlertMessage(messageHeader: "Error", messageBody: "Something went wrong...")
-                return
-            }
-        }
+        return true
     }
     
 

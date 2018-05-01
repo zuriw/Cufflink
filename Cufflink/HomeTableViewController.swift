@@ -217,6 +217,48 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
         // Perform the segue
         performSegue(withIdentifier: "Add Item", sender: self)
     }
+    
+    
+    /*
+     ---------------------------
+     MARK: - Unwind Segue Method
+     ---------------------------
+     */
+    @IBAction func unwindToHomeTableViewController(segue : UIStoryboardSegue) {
+        if segue.identifier !=  "AddItem-Done"  {
+            return
+        }
+        
+        // Obtain the object reference of the source view controller
+        let addItemViewController: AddItemViewController = segue.source as! AddItemViewController
+        var images = [UIImage]()
+        if addItemViewController.chosenImageOnePassed != nil{
+            images.append(addItemViewController.chosenImageOnePassed!)
+        }
+        if addItemViewController.chosenImageTwoPassed != nil{
+            images.append(addItemViewController.chosenImageTwoPassed!)
+        }
+        if addItemViewController.chosenImageThreePassed != nil{
+            images.append(addItemViewController.chosenImageThreePassed!)
+        }
+        appDelegate.upload(images: images){(urls) in
+            var postString = [
+                "title": addItemViewController.itemTitleTextField.text!,
+                "price": addItemViewController.itemPriceTextField.text!,
+                "unitForPrice":addItemViewController.priceUnitSegmentControl.selectedSegmentIndex == 0 ? "perHour" : "perDay",
+                "pictures": urls,
+                "details": addItemViewController.itemDescriptionTextView.text!,
+                "available": true
+                ] as [String : Any]
+            self.appDelegate.requestUrl("/items", postString){ (body, response) in
+                self.viewWillAppear(true)
+            }
+            
+        }
+        
+    }
+    
+    
    
     /*
      -------------------------
