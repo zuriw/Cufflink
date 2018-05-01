@@ -66,7 +66,7 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func profilePictureButtonTapped(_ sender: UIButton) {
-         performSegue(withIdentifier: "Choose Image", sender: self)
+         performSegue(withIdentifier: "Choose Profile Image", sender: self)
     }
     
     /*

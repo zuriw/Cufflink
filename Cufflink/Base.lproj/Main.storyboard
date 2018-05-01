@@ -1118,7 +1118,6 @@
                                 <state key="normal" title="Your Profile Picture"/>
                                 <connections>
                                     <action selector="profilePictureButtonTapped:" destination="qDL-3J-6et" eventType="touchUpInside" id="qgL-E5-B4U"/>
-                                    <segue destination="L2z-99-FWi" kind="show" id="LbG-0V-lC5"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name Here" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="PgH-BJ-KH6">
@@ -1320,7 +1319,7 @@
                         <outlet property="profilePictureButton" destination="HmG-6z-kSA" id="cam-fY-jJ7"/>
                         <outlet property="stateTextField" destination="vcl-vz-MGx" id="19y-LR-xqi"/>
                         <segue destination="exT-Jt-96a" kind="show" identifier="Change Password" id="VdX-fP-DZ0"/>
-                        <segue destination="7mS-CS-VyO" kind="show" identifier="Choose Image" id="xNp-Yx-5Uc"/>
+                        <segue destination="L2z-99-FWi" kind="show" identifier="Choose Profile Image" id="IMh-uE-ML1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hc9-B8-ZsJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2142,6 +2141,5 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="oHq-bD-f6z"/>
-        <segue reference="xNp-Yx-5Uc"/>
     </inferredMetricsTieBreakers>
 </document>
