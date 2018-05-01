@@ -264,6 +264,26 @@ app.get(
   })
 );
 
+app.post(
+  "/items/:id",
+  authenticate,
+  catchPromise(async (req, res) => {
+    const itemFilter = { _id: new ObjectID(req.params.id) };
+    const item = await db.collection("items").findOne(itemFilter);
+
+    if (item.owner !== req.user._id) {
+      res.json({ success: false }).end();
+    }
+
+    await db.collection("items").findOneAndReplace(itemFilter, {
+      ...req.body,
+      owner: req.user._id
+    });
+
+    res.json({ success: true }).end();
+  })
+);
+
 app.get("/me", authenticate, (req, res) => {
   res.json(req.user).end();
 });
