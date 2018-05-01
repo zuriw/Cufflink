@@ -10,11 +10,12 @@ import UIKit
 import CoreLocation
 
 class PersonalProfileViewController: UIViewController {
-
+    
     // Obtain the object reference to the App Delegate object
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
-
-    @IBOutlet var currentUserImageView: UIButton!
+    
+    
+    @IBOutlet var currentUserImageView: UIImageView!
     @IBOutlet var currentUserNameLabel: UILabel!
     @IBOutlet var currentUserLocationLabel: UILabel!
     
@@ -23,7 +24,7 @@ class PersonalProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let currentUser = appDelegate.currentUser
         currentUserNameLabel.text! = currentUser.name()
         
@@ -35,7 +36,7 @@ class PersonalProfileViewController: UIViewController {
         currentUserImageView.clipsToBounds = true
         
         let geoCoder = CLGeocoder()
-        geoCoder.reverseGeocodeLocation(currentUserLocationPassed, completionHandler: { (placemarks, error) -> Void in
+        geoCoder.reverseGeocodeLocation(self.currentUserLocationPassed, completionHandler: { (placemarks, error) -> Void in
             
             // Place details
             var placeMark: CLPlacemark!
@@ -49,19 +50,17 @@ class PersonalProfileViewController: UIViewController {
             self.currentUserLocationLabel.text = location
             
             
+            
+            
+            if currentUser.profile != ""{
+                let profileStr = currentUser.profile
+                let url = URL(string: profileStr)!
+                let profileData = try? Data(contentsOf: url)
+                self.currentUserImageView.image = UIImage(data: profileData!)
+            }
+            
+
         })
-        
-        if currentUser.profile != ""{
-            currentUserImageView.setTitle("", for: .normal)
-            let profileStr = currentUser.profile
-            let url = URL(string: profileStr)!
-            let profileData = try? Data(contentsOf: url)
-            currentUserImageView.setImage(UIImage(data: profileData!)!, for: .normal)
-            currentUserImageView.imageView?.contentMode = UIViewContentMode.scaleAspectFill
-        }
-        
-        
-        // Do any additional setup after loading the view.
     }
     
     
@@ -71,21 +70,47 @@ class PersonalProfileViewController: UIViewController {
      ---------------------------
      */
     @IBAction func unwindToPersonalProfileViewController(segue : UIStoryboardSegue) {
-        if segue.identifier !=  "Settings-Done"  {
-            return
+        if segue.identifier ==  "Settings-Done" {
+            // Obtain the object reference of the source view controller
+            let settingsViewController: SettingsViewController = segue.source as! SettingsViewController
+            var images = [UIImage()]
+            if settingsViewController.profilePicture != nil{
+                images.append(settingsViewController.profilePicture!)
+                appDelegate.upload(images: images){(urls) in
+                    let postString = [
+                        "location": "\(settingsViewController.addressTextField.text!), \(settingsViewController.cityTextField.text!), \(settingsViewController.stateTextField.text!)",
+                        "firstName": settingsViewController.firstNameTextField.text!,
+                        "lastName": settingsViewController.lastNameTextField.text!,
+                        "profile": urls[0],
+                        "phone": settingsViewController.phoneTextField.text!
+                        ] as [String : Any]
+                    
+                    
+                    self.appDelegate.requestUrl("/me", postString){(body, response) in
+                        
+                    }
+                }
+            }else{
+                let postString = [
+                    "location": "\(settingsViewController.addressTextField.text!), \(settingsViewController.cityTextField.text!), \(settingsViewController.stateTextField.text!)",
+                    "firstName": settingsViewController.firstNameTextField.text!,
+                    "lastName": settingsViewController.lastNameTextField.text!,
+                    "phone": settingsViewController.phoneTextField.text!
+                    ] as [String : Any]
+                
+                
+                self.appDelegate.requestUrl("/me", postString){(body, response) in
+                    
+                }
+            }
+            
+            
         }
         
-        // Obtain the object reference of the source view controller
-        let settingsViewController: SettingsViewController = segue.source as! SettingsViewController
-        var postString = [
-            
-        ]
-        appDelegate.requestUrl("/me", <#T##body: Any?##Any?#>, completionHandler: <#T##(Any, HTTPURLResponse) -> Void#>)
-     
-
+        return
     }
     
-
+    
     @IBAction func settingButtonTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "Show Settings", sender: self)
         
@@ -96,7 +121,7 @@ class PersonalProfileViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     @IBAction func logOutButtonTapped(_ sender: UIButton) {
         
         let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LogInViewController") as! LogInViewController
@@ -104,8 +129,30 @@ class PersonalProfileViewController: UIViewController {
         let appDel:AppDelegate = UIApplication.shared.delegate as! AppDelegate
         
         appDel.window?.rootViewController = loginVC
+        
+        
+    }
     
     
+    
+    /*
+     -----------------------------
+     MARK: - Display Alert Message
+     -----------------------------
+     */
+    func showAlertMessage(messageHeader header: String, messageBody body: String) {
+        
+        /*
+         Create a UIAlertController object; dress it up with title, message, and preferred style;
+         and store its object reference into local constant alertController
+         */
+        let alertController = UIAlertController(title: header, message: body, preferredStyle: UIAlertControllerStyle.alert)
+        
+        // Create a UIAlertAction object and add it to the alert controller
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        // Present the alert controller
+        present(alertController, animated: true, completion: nil)
     }
     
 }

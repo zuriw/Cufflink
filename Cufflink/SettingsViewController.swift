@@ -22,35 +22,40 @@ class SettingsViewController: UIViewController {
     @IBOutlet var stateTextField: UITextField!
     @IBOutlet var phoneTextField: UITextField!
     
+    var profilePicture: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let currentUser = appDelegate.currentUser
-        
-        firstNameTextField.text = currentUser.firstName
-        lastNameTextField.text = currentUser.lastName
-        var addr = currentUser.location.split(separator: ",")
-        let city = addr[addr.count - 2]
-        let state = addr[addr.count - 1]
-        var address = ""
-        for index in 0...addr.count - 3{
-            address = address + addr[index]
+        appDelegate.requestUrl("/me", nil){ (body, response) in
+            let currentUser = User(body as! NSDictionary)
+            self.firstNameTextField.text = currentUser.firstName
+            self.lastNameTextField.text = currentUser.lastName
+            var addr = currentUser.location.split(separator: ",")
+            let city = addr[addr.count - 2]
+            let state = addr[addr.count - 1]
+            var address = ""
+            for index in 0...addr.count - 3{
+                address = address + addr[index]
+            }
+            self.addressTextField.text = address
+            self.self.cityTextField.text = String(city)
+            self.stateTextField.text = String(state)
+            self.phoneTextField.text = currentUser.phone
+            
+            
+            if currentUser.profile != ""{
+                //profilePictureButton.setTitle("", for: .normal)
+                let profileStr = currentUser.profile
+                let url = URL(string: profileStr)!
+                let profileData = try? Data(contentsOf: url)
+                self.profilePictureButton.setBackgroundImage(UIImage(data: profileData!)!, for: .normal)
+                self.profilePictureButton.imageView?.contentMode = UIViewContentMode.scaleAspectFill
+            }
+            
         }
-        addressTextField.text = address
-        cityTextField.text = String(city)
-        stateTextField.text = String(state)
-        self.phoneTextField.text = currentUser.phone
         
-        
-        if currentUser.profile != ""{
-            profilePictureButton.setTitle("", for: .normal)
-            let profileStr = currentUser.profile
-            let url = URL(string: profileStr)!
-            let profileData = try? Data(contentsOf: url)
-            profilePictureButton.setImage(UIImage(data: profileData!)!, for: .normal)
-            profilePictureButton.imageView?.contentMode = UIViewContentMode.scaleAspectFill
-        }
+       
         
         
     }
@@ -64,6 +69,38 @@ class SettingsViewController: UIViewController {
          performSegue(withIdentifier: "Choose Image", sender: self)
     }
     
+    /*
+     ---------------------------
+     MARK: - Unwind Segue Method
+     ---------------------------
+     */
+    @IBAction func unwindToSettingsViewController(segue : UIStoryboardSegue) {
+        if segue.identifier == "ChooseImage-Done" {
+            // Obtain the object reference of the source view controller
+            let chooseImageViewController: ChooseImageViewController = segue.source as! ChooseImageViewController
+            
+            profilePictureButton.setImage(chooseImageViewController.chosenImage, for: .normal)
+            profilePicture = chooseImageViewController.chosenImage
+            profilePictureButton.imageView?.contentMode = UIViewContentMode.scaleAspectFill
+        }
+        if segue.identifier == "PasswordChange-Done" {
+            // Obtain the object reference of the source view controller
+            let changePasswordViewController: ChangePasswordViewController = segue.source as! ChangePasswordViewController
+            let postString = [
+                "password": changePasswordViewController.newPssswordTextField.text!
+            ]
+            self.appDelegate.requestUrl("/me", postString){(body, response) in
+                
+            }
+            
+            
+        }
+        
+    }
+    
+    @IBAction func changePasswordTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "Change Password", sender: self)
+    }
     
     /*
      ------------------------
@@ -98,17 +135,6 @@ class SettingsViewController: UIViewController {
         return true
     }
 
-    /*
-     -------------------------
-     MARK: - Prepare For Segue
-     -------------------------
-     */
-    
-    // This method is called by the system whenever you invoke the method performSegueWithIdentifier:sender:
-    // You never call this method. It is invoked by the system.
-    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
-        
-    }
     
     /*
      -----------------------------
