@@ -286,8 +286,19 @@ app.get(
     const cursor = await db
       .collection("items")
       .find({ owner: new ObjectID(req.user._id) });
+    const items = await cursor.toArray();
 
-    res.json(await cursor.toArray()).end();
+    res
+      .json(
+        items.map(item => ({
+          _id: item._id,
+          title: item.title,
+          price: item.price,
+          unitForPrice: item.unitForPrice,
+          thumbnail: item.pictures[0]
+        }))
+      )
+      .end();
   })
 );
 
@@ -311,8 +322,19 @@ app.get(
     const cursor = await db
       .collection("items")
       .find({ owner: new ObjectID(req.params.id) });
+    const items = await cursor.toArray();
 
-    res.json(await cursor.toArray()).end();
+    res
+      .json(
+        items.map(item => ({
+          _id: item._id,
+          title: item.title,
+          price: item.price,
+          unitForPrice: item.unitForPrice,
+          thumbnail: item.pictures[0]
+        }))
+      )
+      .end();
   })
 );
 
