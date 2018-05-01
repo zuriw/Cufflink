@@ -201,6 +201,7 @@ app.get(
               price: item.price,
               unitForPrice: item.unitForPrice,
               thumbnail: item.pictures[0],
+              available: item.available,
               ownerLocation: owner.location
             };
           })
