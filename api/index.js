@@ -264,6 +264,26 @@ app.get(
   })
 );
 
+app.post(
+  "/items/:id",
+  authenticate,
+  catchPromise(async (req, res) => {
+    const itemFilter = { _id: new ObjectID(req.params.id) };
+    const item = await db.collection("items").findOne(itemFilter);
+
+    if (item.owner.toString() !== req.user._id.toString()) {
+      res.json({ success: false }).end();
+    }
+
+    await db.collection("items").findOneAndReplace(itemFilter, {
+      ...req.body,
+      owner: req.user._id
+    });
+
+    res.json({ success: true }).end();
+  })
+);
+
 app.get("/me", authenticate, (req, res) => {
   res.json(req.user).end();
 });
@@ -286,8 +306,20 @@ app.get(
     const cursor = await db
       .collection("items")
       .find({ owner: new ObjectID(req.user._id) });
+    const items = await cursor.toArray();
 
-    res.json(await cursor.toArray()).end();
+    res
+      .json(
+        items.map(item => ({
+          _id: item._id,
+          title: item.title,
+          price: item.price,
+          unitForPrice: item.unitForPrice,
+          thumbnail: item.pictures[0],
+          available: item.available
+        }))
+      )
+      .end();
   })
 );
 
@@ -311,8 +343,20 @@ app.get(
     const cursor = await db
       .collection("items")
       .find({ owner: new ObjectID(req.params.id) });
+    const items = await cursor.toArray();
 
-    res.json(await cursor.toArray()).end();
+    res
+      .json(
+        items.map(item => ({
+          _id: item._id,
+          title: item.title,
+          price: item.price,
+          unitForPrice: item.unitForPrice,
+          thumbnail: item.pictures[0],
+          available: item.available
+        }))
+      )
+      .end();
   })
 );
 

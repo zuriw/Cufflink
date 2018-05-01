@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56A7259D2097EC770011492F /* YourItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A7259C2097EC770011492F /* YourItemsTableViewController.swift */; };
+		56A7259F2097EF6F0011492F /* EditItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A7259E2097EF6F0011492F /* EditItemViewController.swift */; };
+		56A725A12097FCAE0011492F /* YourItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A725A02097FCAE0011492F /* YourItemTableViewCell.swift */; };
 		D527B6E5203F2E5A00EB380E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D527B6E4203F2E5A00EB380E /* AppDelegate.swift */; };
 		D527B6EA203F2E5A00EB380E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D527B6E8203F2E5A00EB380E /* Main.storyboard */; };
 		D527B6EC203F2E5A00EB380E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D527B6EB203F2E5A00EB380E /* Assets.xcassets */; };
@@ -31,6 +34,9 @@
 /* Begin PBXFileReference section */
 		267D95EE76AEE99F4D20107E /* Pods-Cufflink.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cufflink.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Cufflink/Pods-Cufflink.debug.xcconfig"; sourceTree = "<group>"; };
 		2BDDBC279F1A98ADBAA1627C /* Pods-Cufflink.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cufflink.release.xcconfig"; path = "Pods/Target Support Files/Pods-Cufflink/Pods-Cufflink.release.xcconfig"; sourceTree = "<group>"; };
+		56A7259C2097EC770011492F /* YourItemsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourItemsTableViewController.swift; sourceTree = "<group>"; };
+		56A7259E2097EF6F0011492F /* EditItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemViewController.swift; sourceTree = "<group>"; };
+		56A725A02097FCAE0011492F /* YourItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourItemTableViewCell.swift; sourceTree = "<group>"; };
 		6103BDB51FB66E832DD1B280 /* Pods_Cufflink.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cufflink.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D527B6E1203F2E5A00EB380E /* Cufflink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cufflink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D527B6E4203F2E5A00EB380E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +123,9 @@
 				D527B6EB203F2E5A00EB380E /* Assets.xcassets */,
 				D527B6ED203F2E5A00EB380E /* LaunchScreen.storyboard */,
 				D527B6F0203F2E5A00EB380E /* Info.plist */,
+				56A7259C2097EC770011492F /* YourItemsTableViewController.swift */,
+				56A7259E2097EF6F0011492F /* EditItemViewController.swift */,
+				56A725A02097FCAE0011492F /* YourItemTableViewCell.swift */,
 			);
 			path = Cufflink;
 			sourceTree = "<group>";
@@ -274,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5D2ED1B209422EB00E04827 /* WelcomeViewController.swift in Sources */,
+				56A7259F2097EF6F0011492F /* EditItemViewController.swift in Sources */,
 				D531B550207BF8330021B08E /* HomeTableViewCell.swift in Sources */,
 				D54841BB20898BF80003F7AE /* UserProfileViewController.swift in Sources */,
 				D527B6F92040C58C00EB380E /* SignUpViewController.swift in Sources */,
@@ -283,7 +293,9 @@
 				D527B6E5203F2E5A00EB380E /* AppDelegate.swift in Sources */,
 				D54841B9208831440003F7AE /* AddItemViewController.swift in Sources */,
 				D5FDCF4820955FEB00C41100 /* ChooseImageViewController.swift in Sources */,
+				56A7259D2097EC770011492F /* YourItemsTableViewController.swift in Sources */,
 				D531B552207F88080021B08E /* ItemDetailsViewController.swift in Sources */,
+				56A725A12097FCAE0011492F /* YourItemTableViewCell.swift in Sources */,
 				D531B549207BEC790021B08E /* HomeTableViewController.swift in Sources */,
 				D5F2A9D32097DD120059FDFB /* SettingsViewController.swift in Sources */,
 			);
