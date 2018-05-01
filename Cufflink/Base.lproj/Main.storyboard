@@ -1118,6 +1118,7 @@
                                 <state key="normal" title="Your Profile Picture"/>
                                 <connections>
                                     <action selector="profilePictureButtonTapped:" destination="qDL-3J-6et" eventType="touchUpInside" id="qgL-E5-B4U"/>
+                                    <segue destination="L2z-99-FWi" kind="show" id="LbG-0V-lC5"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name Here" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="PgH-BJ-KH6">
@@ -2054,6 +2055,77 @@
                 <exit id="RWD-cR-PY9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4759" y="2300"/>
+        </scene>
+        <!--Item Image-->
+        <scene sceneID="ZVc-JG-rBo">
+            <objects>
+                <viewController id="L2z-99-FWi" customClass="ChooseImageViewController" customModule="Cufflink" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vXL-3C-RrC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Dkc-sC-gbD">
+                                <rect key="frame" x="0.0" y="64" width="375" height="451"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="psF-Gs-ls9">
+                                <rect key="frame" x="0.0" y="599" width="375" height="68"/>
+                                <color key="backgroundColor" red="0.58039215690000001" green="0.090196078430000007" blue="0.31764705879999999" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="68" id="ZcY-ii-U6x"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Lobster-Regular" family="Lobster" pointSize="20"/>
+                                <state key="normal" title="Photo Library">
+                                    <color key="titleColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
+                                </state>
+                                <connections>
+                                    <action selector="photoLibraryButtonTapped:" destination="L2z-99-FWi" eventType="touchUpInside" id="QSX-n4-2k7"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xlz-DJ-HNP">
+                                <rect key="frame" x="0.0" y="523" width="375" height="68"/>
+                                <color key="backgroundColor" red="0.58039215690000001" green="0.090196078430000007" blue="0.31764705879999999" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="68" id="Ue0-nQ-3xn"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Lobster-Regular" family="Lobster" pointSize="20"/>
+                                <state key="normal" title="Take Photo">
+                                    <color key="titleColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
+                                </state>
+                                <connections>
+                                    <action selector="takePhotoButtonTapped:" destination="L2z-99-FWi" eventType="touchUpInside" id="QiX-x2-n1O"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.86274509799999999" green="0.81568627449999997" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="psF-Gs-ls9" firstAttribute="leading" secondItem="Foh-Ht-zuD" secondAttribute="leading" id="5LD-GK-oQG"/>
+                            <constraint firstItem="psF-Gs-ls9" firstAttribute="trailing" secondItem="Foh-Ht-zuD" secondAttribute="trailing" id="CMY-zD-8fF"/>
+                            <constraint firstItem="Dkc-sC-gbD" firstAttribute="top" secondItem="Foh-Ht-zuD" secondAttribute="top" id="FTi-M8-eSj"/>
+                            <constraint firstItem="Dkc-sC-gbD" firstAttribute="leading" secondItem="Foh-Ht-zuD" secondAttribute="leading" id="FXO-w0-js5"/>
+                            <constraint firstItem="psF-Gs-ls9" firstAttribute="bottom" secondItem="Foh-Ht-zuD" secondAttribute="bottom" id="IZF-x7-ghy"/>
+                            <constraint firstItem="xlz-DJ-HNP" firstAttribute="top" secondItem="Dkc-sC-gbD" secondAttribute="bottom" constant="8" id="Jlt-T2-RCv"/>
+                            <constraint firstItem="psF-Gs-ls9" firstAttribute="top" secondItem="xlz-DJ-HNP" secondAttribute="bottom" constant="8" id="Vk6-Vg-8Bc"/>
+                            <constraint firstItem="xlz-DJ-HNP" firstAttribute="trailing" secondItem="Foh-Ht-zuD" secondAttribute="trailing" id="WpA-iQ-VSg"/>
+                            <constraint firstItem="Dkc-sC-gbD" firstAttribute="trailing" secondItem="Foh-Ht-zuD" secondAttribute="trailing" id="b55-fb-1AL"/>
+                            <constraint firstItem="xlz-DJ-HNP" firstAttribute="leading" secondItem="Foh-Ht-zuD" secondAttribute="leading" id="nbI-Ed-sGw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Foh-Ht-zuD"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Item Image" id="yf6-na-gzw">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="hgG-dU-J8y">
+                            <connections>
+                                <segue destination="Jqw-dh-f9o" kind="unwind" identifier="ChooseImage-Done" unwindAction="unwindToSettingsViewControllerWithSegue:" id="ASu-xx-tkU"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="imageView" destination="Dkc-sC-gbD" id="Tuh-zn-9TL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ghh-I9-TX1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Jqw-dh-f9o" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="5708" y="2396"/>
         </scene>
     </scenes>
     <resources>
