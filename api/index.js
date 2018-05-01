@@ -271,7 +271,7 @@ app.post(
     const itemFilter = { _id: new ObjectID(req.params.id) };
     const item = await db.collection("items").findOne(itemFilter);
 
-    if (item.owner !== req.user._id) {
+    if (item.owner.toString() !== req.user._id.toString()) {
       res.json({ success: false }).end();
     }
 
