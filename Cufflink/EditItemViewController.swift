@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditItemViewController: UIViewController {
+class EditItemViewController: UIViewController, UITextViewDelegate {
 
     // Obtain the object reference to the App Delegate object
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -22,6 +22,9 @@ class EditItemViewController: UIViewController {
     @IBOutlet var itemDescriptionTextView: UITextView!
     @IBOutlet var priceUnitSegmentControl: UISegmentedControl!
     @IBOutlet var availableSegmentedControl: UISegmentedControl!
+    @IBOutlet var deleteImageTwoButton: UIButton!
+    @IBOutlet var deleteImageThreeButton: UIButton!
+    
     
     var chosenImageOnePassed: UIImage?
     var chosenImageTwoPassed: UIImage?
@@ -39,6 +42,20 @@ class EditItemViewController: UIViewController {
         addImageThreeButton.layer.borderWidth = 1
         doneEditingButton.layer.cornerRadius = 20
         doneEditingButton.clipsToBounds = true
+        
+        //Making Delete Image Buttons circular
+        deleteImageTwoButton.layer.borderWidth = 1
+        deleteImageTwoButton.layer.masksToBounds = false
+        deleteImageTwoButton.layer.borderColor = UIColor.white.cgColor
+        deleteImageTwoButton.layer.cornerRadius = deleteImageTwoButton.frame.height/2
+        deleteImageTwoButton.clipsToBounds = true
+        
+        deleteImageThreeButton.layer.borderWidth = 1
+        deleteImageThreeButton.layer.masksToBounds = false
+        deleteImageThreeButton.layer.borderColor = UIColor.white.cgColor
+        deleteImageThreeButton.layer.cornerRadius = deleteImageThreeButton.frame.height/2
+        deleteImageThreeButton.clipsToBounds = true
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -145,7 +162,44 @@ class EditItemViewController: UIViewController {
 
         return true
     }
+    
+    
+    @IBAction func deleteImageButtonTapped(_ sender: UIButton) {
+        if sender.tag == 2{
+            if chosenImageTwoPassed != nil{
+                chosenImageTwoPassed = nil
+                addImageTwoButton.setBackgroundImage(nil, for: .normal)
+                addImageTwoButton.setTitle("Add Image", for: .normal)
+            }
+        }else if sender.tag == 3{
+            if chosenImageThreePassed != nil{
+                chosenImageThreePassed = nil
+                addImageThreeButton.setBackgroundImage(nil, for: .normal)
+                addImageThreeButton.setTitle("Add Image", for: .normal)
+            }
+        }else{
+            return
+        }
+    }
 
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y - 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+            
+        })
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y + 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+            
+        })
+    }
+
+    
+    
+    
     /*
      ------------------------
      MARK: - IBAction Methods

@@ -27,7 +27,7 @@ class LogInViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+  
 
     /*
      -----------------------------
@@ -60,6 +60,44 @@ class LogInViewController: UIViewController {
         // Present the alert controller
         present(alertController, animated: true, completion: nil)
     }
+    
+    /*
+     ---------------------------
+     MARK: - Unwind Segue Method
+     ---------------------------
+     */
+    @IBAction func unwindToLogInViewController(segue : UIStoryboardSegue) {
+        if segue.identifier !=  "SignUp-Cancel"  {
+            return
+        }
+        
+        
+     
+    }
+    
+    /*
+     ------------------------
+     MARK: - IBAction Methods
+     ------------------------
+     */
+    @IBAction func keyboardDone(_ sender: UITextField) {
+        
+        // When the Text Field resigns as first responder, the keyboard is automatically removed.
+        sender.resignFirstResponder()
+    }
+    
+    @IBAction func backgroundTouch(_ sender: UIControl) {
+        /*
+         "This method looks at the current view and its subview hierarchy for the text field that is
+         currently the first responder. If it finds one, it asks that text field to resign as first responder.
+         If the force parameter is set to true, the text field is never even asked; it is forced to resign." [Apple]
+         
+         When the Text Field resigns as first responder, the keyboard is automatically removed.
+         */
+        view.endEditing(true)
+    }
+    
+    
     
     @IBAction func signInButtonTapped(_ sender: Any) {
         // Get the email entered by the user

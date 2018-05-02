@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     // Obtain the object reference to the App Delegate object
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -21,6 +21,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet var cityTextField: UITextField!
     @IBOutlet var stateTextField: UITextField!
     @IBOutlet var phoneTextField: UITextField!
+
     
     var profilePicture: UIImage?
     
@@ -49,7 +50,7 @@ class SettingsViewController: UIViewController {
                 let profileStr = currentUser.profile
                 let url = URL(string: profileStr)!
                 let profileData = try? Data(contentsOf: url)
-                self.profilePictureButton.setBackgroundImage(UIImage(data: profileData!)!, for: .normal)
+                self.profilePictureButton.setImage(UIImage(data: profileData!)!, for: .normal)
                 self.profilePictureButton.imageView?.contentMode = UIViewContentMode.scaleAspectFill
             }
             
@@ -101,6 +102,37 @@ class SettingsViewController: UIViewController {
         performSegue(withIdentifier: "Change Password", sender: self)
     }
     
+    
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y - 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+            
+        })
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y + 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+            
+        })
+    }
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        //Only Phone Number Tag is 1, and State Tag is 2, rest is 0
+        if textField.tag == 1{ //Phone Number
+            guard let text = textField.text else { return true }
+            let newLength = text.characters.count + string.characters.count - range.length
+            return newLength <= 10
+        }else if textField.tag == 2{ //State
+            guard let text = textField.text else { return true }
+            let newLength = text.characters.count + string.characters.count - range.length
+            return newLength <= 2
+        }
+        return true
+    }
+    
+    
     /*
      ------------------------
      MARK: - IBAction Methods
@@ -123,6 +155,10 @@ class SettingsViewController: UIViewController {
         view.endEditing(true)
     }
     
+
+    
+    
+    
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         //Add verification to this...
         if firstNameTextField.text == "" || lastNameTextField.text == "" || addressTextField.text == "" || cityTextField.text == "" || stateTextField.text == "" || phoneTextField.text == ""{
@@ -130,7 +166,12 @@ class SettingsViewController: UIViewController {
             return false
         }
         
-        
+        //validate phone
+        if (phoneTextField.text?.count)! < 10{
+            self.showAlertMessage(messageHeader: "Invalid Phone Number!", messageBody: "Please enter a phone number with 10 digits")
+            return false
+        }
+
         return true
     }
 

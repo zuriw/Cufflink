@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var firstNameTextField: UITextField!
     @IBOutlet var lastNameTextField: UITextField!
     @IBOutlet var phoneNumberTextField: UITextField!
@@ -46,78 +47,142 @@ class SignUpViewController: UIViewController {
         let emailObtained = emailTextField.text!
         let passwordObtained = passwordTextField.text!
         
-        let location = addressObtained + ", " + cityObtained + ", " + stateObtained
         
-        //NEEDS TO BE TESTED, AND ADD MORE VALIDATION
+        let location = addressObtained + ", " + cityObtained + ", " + stateObtained
+
         /*********************
          Input Data Validation
          *********************/
         
+        
+        //validate email
         if !isValidEmail(testStr: emailObtained){
             showAlertMessage(messageHeader: "Invalid Email Entered!", messageBody: "Please enter a valid email")
             return
         }
         
+        //validate password
         if passwordTextField.text != confirmPasswordTextField.text{
             showAlertMessage(messageHeader: "Incorrect Password!", messageBody: "Please enter a valid password")
             return
         }
         
-        //phone number validation
-        //Need State validation
-        //Need Location validation ...
         
-        /***************************
-         Indicate Activity is loading
-         ****************************/
+       //validate phone
+        if phoneObtained.count < 10{
+            self.showAlertMessage(messageHeader: "Invalid Phone Number!", messageBody: "Please enter a phone number with 10 digits")
+            return
+        }
         
-        //Create Activity Indicator
-        let myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-        
-        //Position Activity Indicator in the center of the main view
-        myActivityIndicator.center = view.center
-        
-        myActivityIndicator.hidesWhenStopped = false
-        
-        //Start Activity Indicator
-        myActivityIndicator.startAnimating()
-        
-        view.addSubview(myActivityIndicator)
-        
-        //send HTTP request to perform Log in
-        self.applicationDelegate.signUp(firstName: firstNameObtained, lastName: lastNameObtained, phone: phoneObtained, email: emailObtained, location: location, password: passwordObtained) { (success) in
-            myActivityIndicator.stopAnimating()
-            myActivityIndicator.removeFromSuperview()
-            if success == false {
-                // show user alert when login credentials are incorrect
-                self.showAlertMessage(
-                    messageHeader: "Invalid SignUp!",
-                    messageBody: "Required fields not completed or account already exist"
-                )
-                return
-            } else {
-                //Log in to get a token
-                //send HTTP request to perform Log in
-                self.applicationDelegate.login(email: emailObtained, password: passwordObtained) { (success) in
-                    myActivityIndicator.stopAnimating()
-                    myActivityIndicator.removeFromSuperview()
-                    if success == false {
-                        // show user alert when login credentials are incorrect
-                        self.showAlertMessage(
-                            messageHeader: "Error",
-                            messageBody: "Something is wrong..."
-                        )
-                        return
-                    } else {
-                        self.performSegue(withIdentifier: "Show Congrats", sender: self)
+        //validate location
+        let geoCoder = CLGeocoder()
+        geoCoder.geocodeAddressString(location) { (placemarks, error) in
+            guard
+                let placemarks = placemarks,
+                let ownerLocation = placemarks.first?.location
+                else {
+                    // handle no location found
+                    self.showAlertMessage(messageHeader: "Invalid Address!", messageBody: "Please enter a valid address")
+                    return
+            }
+            /***************************
+             Indicate Activity is loading
+             ****************************/
+            
+            //Create Activity Indicator
+            let myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+            
+            //Position Activity Indicator in the center of the main view
+            myActivityIndicator.center = self.view.center
+            
+            myActivityIndicator.hidesWhenStopped = false
+            
+            //Start Activity Indicator
+            myActivityIndicator.startAnimating()
+            
+            self.view.addSubview(myActivityIndicator)
+            
+            //send HTTP request to perform Log in
+            self.applicationDelegate.signUp(firstName: firstNameObtained, lastName: lastNameObtained, phone: phoneObtained, email: emailObtained, location: location, password: passwordObtained) { (success) in
+                myActivityIndicator.stopAnimating()
+                myActivityIndicator.removeFromSuperview()
+                if success == false {
+                    // show user alert when login credentials are incorrect
+                    self.showAlertMessage(
+                        messageHeader: "Invalid SignUp!",
+                        messageBody: "Required fields not completed or account already exist"
+                    )
+                    return
+                } else {
+                    //Log in to get a token
+                    //send HTTP request to perform Log in
+                    self.applicationDelegate.login(email: emailObtained, password: passwordObtained) { (success) in
+                        myActivityIndicator.stopAnimating()
+                        myActivityIndicator.removeFromSuperview()
+                        if success == false {
+                            // show user alert when login credentials are incorrect
+                            self.showAlertMessage(
+                                messageHeader: "Error",
+                                messageBody: "Something is wrong..."
+                            )
+                            return
+                        } else {
+                            
+                            self.performSegue(withIdentifier: "Show Congrats", sender: self)
+                        }
                     }
+                    
                 }
-                
             }
         }
+        
+       
+       
     }
     
+    /*
+     ------------------------------------
+     MARK: - UITextField Delegate Methods
+     ------------------------------------
+     */
+    
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        //anything that has delegate but phoneNumber
+        if textField.tag == 0 || textField.tag == 2{
+            UIView.animate(withDuration: 0.3, animations: {
+                self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y - 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+                
+            })
+        }
+      
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        //anything that has delegate but phoneNumber
+        if textField.tag == 0 || textField.tag == 2{
+            UIView.animate(withDuration: 0.3, animations: {
+                self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y + 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+                
+            })
+        }
+        
+    }
 
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        //Only Phone Number Tag is 1, and State Tag is 2, rest is 0
+        if textField.tag == 1{ //Phone Number
+            guard let text = textField.text else { return true }
+            let newLength = text.characters.count + string.characters.count - range.length
+            return newLength <= 10 // Bool
+        }else if textField.tag == 2{ //State
+            guard let text = textField.text else { return true }
+            let newLength = text.characters.count + string.characters.count - range.length
+            return newLength <= 2 // Bool
+        }
+        return true
+    }
+    
 
     
     /*

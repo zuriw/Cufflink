@@ -78,6 +78,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
         
     }
     
+    
+    
     @IBAction func profileButtonTapped(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "Show Personal Profile", sender: self)
     }
@@ -137,7 +139,10 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
             //only shows available items
             //NEEDS TO SORT BY DISTANCE FROM CURRENT USER!!!!
             for item in allItems {
-                self.items.append(item)
+                if item.available{
+                     self.items.append(item)
+                }
+               
                 
 //                self.appDelegate.requestUrl("/items/\(item.id)", nil){ (body, response) in
 //                    var itemDetails = ItemDetails(body as! NSDictionary)
@@ -191,7 +196,6 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
         
         cell.itemTitleLabel!.text = item.title
         cell.itemPriceLabel!.text = String(item.price)
-        //cell.itemPriceUnitLabel!.t
 
         return cell
     }
