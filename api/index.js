@@ -200,7 +200,7 @@ app.get(
               title: item.title,
               price: item.price,
               unitForPrice: item.unitForPrice,
-              thumbnail: item.pictures[0],
+              thumbnail: item.pictures && item.pictures[0],
               available: item.available,
               ownerLocation: owner.location
             };
@@ -215,12 +215,16 @@ app.post(
   "/items",
   authenticate,
   catchPromise(async (req, res) => {
-    await db.collection("items").insertOne({
-      ...req.body,
-      owner: req.user._id
-    });
+    if (req.body.pictures == null || req.body.pictures.length < 0) {
+      res.json({ success: false }).end();
+    } else {
+      await db.collection("items").insertOne({
+        ...req.body,
+        owner: req.user._id
+      });
 
-    res.json({ success: true }).end();
+      res.json({ success: true }).end();
+    }
   })
 );
 
