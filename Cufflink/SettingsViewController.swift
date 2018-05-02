@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     // Obtain the object reference to the App Delegate object
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -100,6 +100,25 @@ class SettingsViewController: UIViewController {
     @IBAction func changePasswordTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "Change Password", sender: self)
     }
+    
+    
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y - 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+            
+        })
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y + 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+            
+        })
+    }
+
+    
+    
     
     /*
      ------------------------

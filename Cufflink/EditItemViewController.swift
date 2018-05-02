@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditItemViewController: UIViewController {
+class EditItemViewController: UIViewController, UITextViewDelegate {
 
     // Obtain the object reference to the App Delegate object
     var appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -182,6 +182,24 @@ class EditItemViewController: UIViewController {
         }
     }
 
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y - 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+            
+        })
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x:self.view.frame.origin.x, y:self.view.frame.origin.y + 200, width:self.view.frame.size.width, height:self.view.frame.size.height);
+            
+        })
+    }
+
+    
+    
+    
     /*
      ------------------------
      MARK: - IBAction Methods

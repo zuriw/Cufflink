@@ -78,6 +78,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate{
         
     }
     
+    
+    
     @IBAction func profileButtonTapped(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "Show Personal Profile", sender: self)
     }
