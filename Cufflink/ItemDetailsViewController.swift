@@ -69,7 +69,7 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
                 let url = URL(string: profileStr)!
                 let profileData = try? Data(contentsOf: url)
                 if self.ownerImageButton != nil{
-                    self.ownerImageButton?.setBackgroundImage(UIImage(data: profileData!), for: .normal)
+                    self.ownerImageButton?.setImage(UIImage(data: profileData!), for: .normal)
                     self.ownerImageButton?.imageView?.contentMode = UIViewContentMode.scaleAspectFill
                 }
                 
@@ -98,12 +98,17 @@ class ItemDetailsViewController: UIViewController, MFMessageComposeViewControlle
                 
                 self.distanceToPass = String(format: "%.1f", self.userLocationPassed.distance(from: ownerLocation) / 1609.34) + " Miles away"
                 
+                //if this item belongs to current user
+                if self.item.owner.id == self.appDelegate.currentUser.id{
+                    self.isUserItem = true
+                    self.messageButton.removeFromSuperview()
+                    self.distanceLabel?.text! = ""
+                }
+                
+                
+                
             }
-            //if this item belongs to current user
-            if self.item.owner.id == self.appDelegate.currentUser.id{
-                self.isUserItem = true
-                self.messageButton.removeFromSuperview() //TEST....works!
-            }
+          
         }
     }
 
