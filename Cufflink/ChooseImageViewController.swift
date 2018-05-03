@@ -68,7 +68,6 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
         picker.allowsEditing = false
         picker.sourceType = .photoLibrary
         picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
-        //picker.modalPresentationStyle = .popover
         present(picker, animated: true, completion: nil)
     }
     
@@ -124,8 +123,7 @@ class ChooseImageViewController: UIViewController, UIImagePickerControllerDelega
     
 
  
-        
-    
+ 
     
     /*
      -----------------------------

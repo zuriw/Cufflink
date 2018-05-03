@@ -1566,6 +1566,9 @@
                                 <color key="backgroundColor" white="1" alpha="0.55487478599999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outlet property="delegate" destination="atn-7f-SNN" id="Kp6-Zz-iIw"/>
+                                </connections>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RUV-6k-gVg">
                                 <rect key="frame" x="239" y="617" width="103" height="30"/>
@@ -1612,13 +1615,7 @@
                             <action selector="backgroundTouch:" destination="atn-7f-SNN" eventType="touchDown" id="VQR-A3-tgN"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="Edit Item" id="0FR-g9-snQ">
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="gwT-ni-YHE">
-                            <connections>
-                                <segue destination="Ae3-qh-Ep4" kind="unwind" identifier="Edit Item" unwindAction="unwindToYourItemsTableViewControllerWithSegue:" id="uB8-Gq-qMb"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Edit Item" id="0FR-g9-snQ"/>
                     <connections>
                         <outlet property="addImageOneButton" destination="kKv-fJ-Ahu" id="JF3-Bf-51A"/>
                         <outlet property="addImageThreeButton" destination="PWC-BP-zt3" id="d3U-Uh-6by"/>

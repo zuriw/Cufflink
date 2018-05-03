@@ -139,8 +139,13 @@ class LogInViewController: UIViewController {
         
         //send HTTP request to perform Log in
         self.appDelegate.login(email: emailObtained, password: passwordObtained) { (success) in
+            
+            
+            
             myActivityIndicator.stopAnimating()
             myActivityIndicator.removeFromSuperview()
+            
+            
             if success == false {
                 // show user alert when login credentials are incorrect
                 self.showAlertMessage(
