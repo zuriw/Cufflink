@@ -15,7 +15,18 @@ const hashPassword = password => {
 
 const secret = "7hi2135SiSa$ee;bloy8l9EiEeeCre7";
 
-const catchPromise = fn => async (req, res) => {
+// const catchPromise = fn => async (req, res) => {
+//   try {
+//     await fn(req, res);
+//   } catch (error) {
+//     res
+//       .json({ error: error.toString() })
+//       .status(500)
+//       .end();
+//   }
+// };
+
+const catchPromise = async (fn) =>{
   try {
     await fn(req, res);
   } catch (error) {
@@ -24,7 +35,7 @@ const catchPromise = fn => async (req, res) => {
       .status(500)
       .end();
   }
-};
+}
 
 var db;
 var bucket;
